@@ -1,4 +1,7 @@
+import glob
+import pickle
 from optparse import OptionParser
+from visual_search_engine import *
 
 
 def parse_execution_options():
@@ -11,7 +14,30 @@ def parse_execution_options():
     return parser.parse_args()
 
 
+def save_descriptors(descriptors, fileName):
+    with open(fileName, 'wb') as f:
+        pickle.dump(descriptors, f, pickle.HIGHEST_PROTOCOL)
+        print("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
+
+FILE_PATTERN = '*.jpg'
+
 if __name__ == "__main__":
     (options, args) = parse_execution_options()
     descriptors = []
-    # TODO implement this method
+    extractor = ExtractorProvider.get_extractor()
+    images_directory = options.images
+    files = sorted(glob.glob(images_directory + FILE_PATTERN))
+    number_of_descriptors = 0
+    for fileName in files:
+        try:
+            image = load_grayscale_img(images_directory + fileName)
+            single_img_descriptors = extractor.detectAndCompute(image, None)[1]
+            descriptors.append(single_img_descriptors)
+            number_of_descriptors += len(single_img_descriptors)
+            if number_of_descriptors > options.maxDescriptors:
+                break
+        except SearchEngineError as e:
+            e.message
+    save_descriptors(descriptors, options.save)
+
+
