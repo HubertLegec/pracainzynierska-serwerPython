@@ -1,16 +1,18 @@
 import glob
 import pickle
-from optparse import OptionParser
+import argparse
 from visual_search_engine import *
 
 
 def parse_execution_options():
-    parser = OptionParser()
-    parser.add_option('-c', '--config', action='store', dest='config', help='Path to configuration file')
-    parser.add_option('-s', '--save', action='store', dest='saveTo', help='Path to result file with vocabulary')
-    parser.add_option('-i', '--images', action='store', dest='imagesPath', help='Path to directory with input images')
-    parser.add_option('-m', '--maxDescriptors', action='store', type='int', dest='maxDescriptors',
-                      help='Maximum number of generated descriptors')
+    parser = argparse.ArgumentParser(description='Visual Search Engine', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-c', '--config', type=str, metavar='PATH', required=True, help='Path to configuration file')
+    parser.add_argument('-s', '--save', type=str, metavar='PATH', required=True,
+                        help='Path to result file with vocabulary')
+    parser.add_argument('-i', '--images', type=str, metavar='PATH', required=True,
+                        help='Path to directory with input images')
+    parser.add_argument('-m', '--maxDescriptors', type=int, dest='maxDescriptors',
+                        help='Maximum number of generated descriptors')
     return parser.parse_args()
 
 
@@ -19,10 +21,11 @@ def save_descriptors(descriptors, fileName):
         pickle.dump(descriptors, f, pickle.HIGHEST_PROTOCOL)
         print("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
 
+
 FILE_PATTERN = '*.jpg'
 
 if __name__ == "__main__":
-    (options, args) = parse_execution_options()
+    options = parse_execution_options()
     descriptors = []
     extractor = ExtractorProvider.get_extractor()
     images_directory = options.images
@@ -39,5 +42,3 @@ if __name__ == "__main__":
         except SearchEngineError as e:
             e.message
     save_descriptors(descriptors, options.save)
-
-

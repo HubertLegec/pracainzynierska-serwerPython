@@ -1,13 +1,15 @@
 import pickle
-from optparse import OptionParser
+import argparse
 from visual_search_engine import *
 
 
 def parse_execution_options():
-    parser = OptionParser()
-    parser.add_option('-c', '--config', action='store', dest='config', help='Path to configuration file')
-    parser.add_option('-s', '--save', action='store', dest='saveTo', help='Path to result file with vocabulary')
-    parser.add_option('-d', '--descriptors', action='store', dest='descriptors', help='Path to file with descriptors')
+    parser = argparse.ArgumentParser(description='Visual search engine', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-c', '--config', type=str, metavar='PATH', help='Path to configuration file')
+    parser.add_argument('-s', '--save', type=str, metavar='PATH', required=True,
+                        help='Path to result file with vocabulary')
+    parser.add_argument('-d', '--descriptors', type=str, metavar='PATH', required=True,
+                        help='Path to file with descriptors')
     return parser.parse_args()
 
 
@@ -25,7 +27,7 @@ def save_vocabulary(vocabulary, file_name):
 
 
 if __name__ == "__main__":
-    (options, args) = parse_execution_options()
+    options = parse_execution_options()
     descriptors = load_descriptors(options.descriptors)
     print('Generating vocabulary...')
     vocabulary = BOW.generate_vocabulary_from_descriptors(descriptors)
