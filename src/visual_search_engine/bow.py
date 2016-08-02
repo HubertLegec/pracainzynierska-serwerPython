@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 
 class BOW:
@@ -28,5 +29,5 @@ class BOW:
     @staticmethod
     def generate_vocabulary_from_descriptors(descriptors, cluster_size):
         bow_trainer = cv2.BOWKMeansTrainer(cluster_size)
-        bow_trainer.add(descriptors)
+        bow_trainer.add(np.array(descriptors))
         return bow_trainer.cluster()

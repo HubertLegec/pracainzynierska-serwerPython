@@ -22,7 +22,14 @@ def save_descriptors(descriptors, fileName):
         print("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
 
 
+def get_max_descriptors(optional_limit):
+    if optional_limit:
+        return optional_limit
+    return DEFAULT_MAX_DESCRIPTORS
+
+
 FILE_PATTERN = '*.jpg'
+DEFAULT_MAX_DESCRIPTORS = 2000
 
 if __name__ == "__main__":
     options = parse_execution_options()
@@ -31,13 +38,14 @@ if __name__ == "__main__":
     images_directory = options.images
     files = sorted(glob.glob(images_directory + FILE_PATTERN))
     number_of_descriptors = 0
+    max_descriptors = get_max_descriptors(options.maxDescriptors)
     for fileName in files:
         try:
-            image = load_grayscale_img(images_directory + fileName)
+            image = load_grayscale_img(fileName)
             single_img_descriptors = extractor.detectAndCompute(image, None)[1]
-            descriptors.append(single_img_descriptors)
+            descriptors.extend(single_img_descriptors)
             number_of_descriptors += len(single_img_descriptors)
-            if number_of_descriptors > options.maxDescriptors:
+            if number_of_descriptors > max_descriptors:
                 break
         except SearchEngineError as e:
             e.message

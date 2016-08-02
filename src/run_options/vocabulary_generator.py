@@ -5,7 +5,8 @@ from visual_search_engine import *
 
 def parse_execution_options():
     parser = argparse.ArgumentParser(description='Visual search engine', formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-c', '--config', type=str, metavar='PATH', help='Path to configuration file')
+    parser.add_argument('-c', '--config', type=str, metavar='PATH', required=True,
+                        help='Path to configuration file')
     parser.add_argument('-s', '--save', type=str, metavar='PATH', required=True,
                         help='Path to result file with vocabulary')
     parser.add_argument('-d', '--descriptors', type=str, metavar='PATH', required=True,
@@ -30,5 +31,5 @@ if __name__ == "__main__":
     options = parse_execution_options()
     descriptors = load_descriptors(options.descriptors)
     print('Generating vocabulary...')
-    vocabulary = BOW.generate_vocabulary_from_descriptors(descriptors)
+    vocabulary = BOW.generate_vocabulary_from_descriptors(descriptors, 200)
     save_vocabulary(vocabulary, options.save)
