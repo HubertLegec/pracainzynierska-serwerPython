@@ -4,7 +4,7 @@ import argparse
 from visual_search_engine import *
 
 
-def parse_execution_options():
+def parse_parameters():
     parser = argparse.ArgumentParser(description='Visual Search Engine', formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-c', '--config', type=str, metavar='PATH', required=True, help='Path to configuration file')
     parser.add_argument('-s', '--save', type=str, metavar='PATH', required=True,
@@ -32,7 +32,7 @@ FILE_PATTERN = '*.jpg'
 DEFAULT_MAX_DESCRIPTORS = 2000
 
 if __name__ == "__main__":
-    options = parse_execution_options()
+    options = parse_parameters()
     descriptors = []
     extractor = ExtractorProvider.get_extractor()
     images_directory = options.images
