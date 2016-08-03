@@ -4,7 +4,7 @@ import configparser
 def load_config(path):
     """Loads loads configuration from file"""
     config_parser = configparser.RawConfigParser()
-    config_parser.read_file(path)
+    config_parser.read(path)
     return transform_config_to_dict(config_parser)
 
 

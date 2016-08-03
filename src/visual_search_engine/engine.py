@@ -5,7 +5,7 @@ __version__ = 0.1
 
 
 class VisualSearchEngine:
-    def __init__(self, vocabulary):
+    def __init__(self, vocabulary, configuration):
         self.bow = BOWProvider.get_bow(vocabulary)
 
     def find(self, image, limit):
