@@ -2,6 +2,7 @@ import glob
 import pickle
 import argparse
 from visual_search_engine import *
+from visual_search_engine.config import load_config
 
 
 def parse_parameters():
@@ -32,13 +33,14 @@ FILE_PATTERN = '*.jpg'
 DEFAULT_MAX_DESCRIPTORS = 2000
 
 if __name__ == "__main__":
-    options = parse_parameters()
+    params = parse_parameters()
+    config = load_config(params.config)
     descriptors = []
-    extractor = ExtractorProvider.get_extractor()
-    images_directory = options.images
+    extractor = ExtractorProvider.get_extractor(config['extractor'])
+    images_directory = params.images
     files = sorted(glob.glob(images_directory + FILE_PATTERN))
     number_of_descriptors = 0
-    max_descriptors = get_max_descriptors(options.maxDescriptors)
+    max_descriptors = get_max_descriptors(params.maxDescriptors)
     for fileName in files:
         try:
             image = load_grayscale_img(fileName)
@@ -49,4 +51,4 @@ if __name__ == "__main__":
                 break
         except SearchEngineError as e:
             e.message
-    save_descriptors(descriptors, options.save)
+    save_descriptors(descriptors, params.save)
