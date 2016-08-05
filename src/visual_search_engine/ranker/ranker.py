@@ -19,11 +19,11 @@ class Ranker(ABC):
         self.method = method
 
     @abstractmethod
-    def rank(self, histogram, index, limit):
+    def rank(self, histogram, repository, limit):
         pass
 
     @abstractmethod
-    def update(self, index):
+    def update(self, repository):
         pass
 
     @staticmethod
