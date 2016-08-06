@@ -1,4 +1,5 @@
 import cv2
+import numpy
 from visual_search_engine.image_loader import *
 
 IMAGE_MAX_SIZE = 800
@@ -9,6 +10,15 @@ def load_grayscale_img(path):
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise ImgLoadError(path)
+    return resize_image(img)
+
+
+def load_grayscale_image_from_buffer(buffer):
+    if len(buffer) == 0:
+        raise ImgLoadError()
+    img = cv2.imdecode(numpy.frombuffer(buffer, numpy.uint8), cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ImgLoadError()
     return resize_image(img)
 
 

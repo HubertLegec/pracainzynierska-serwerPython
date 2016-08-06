@@ -50,5 +50,5 @@ if __name__ == "__main__":
             if number_of_descriptors > max_descriptors:
                 break
         except SearchEngineError as e:
-            e.message
+            print(e.message)
     save_descriptors(descriptors, params.save)

@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request, make_response, jsonify
-from visual_search_engine.web.warehouse import ImageWarehouse
+from visual_search_engine.web.repository import ImageRepository
 
 
 class Searcher(Resource):
@@ -14,7 +14,7 @@ class Searcher(Resource):
         return Searcher.create_json_response(img_urls)
 
     def create_url_for_path(self, path):
-        return self.api.url_for(ImageWarehouse, name=path, _external=True)
+        return self.api.url_for(ImageRepository, name=path, _external=True)
 
     @classmethod
     def create_json_response(cls, urls):

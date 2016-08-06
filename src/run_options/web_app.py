@@ -31,9 +31,7 @@ if __name__ == '__main__':
     vocabulary = load(params.vocabulary)
     search_engine = VisualSearchEngine(vocabulary, configuration)
     config_logger(configuration)
-    logging.debug('debug')
-    logging.info('info')
-    logging.warning('warning')
+    logging.info('web server start...')
     start(search_engine, configuration.web.host, configuration.web.port, params.debug)
 
 
