@@ -22,7 +22,8 @@ def config_logger(config):
     log_file = 'log'
     if config['web']['log_file']:
         log_file = config['web']['log_file']
-    logging.basicConfig(filename=log_file, log_level=getattr(logging, log_level))
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(filename=log_file, log_level=getattr(logging, log_level), format=formatter)
 
 
 if __name__ == '__main__':

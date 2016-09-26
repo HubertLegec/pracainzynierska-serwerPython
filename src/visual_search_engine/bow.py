@@ -9,12 +9,6 @@ class BOW:
         self.bowDescriptorExtractor = cv2.BOWImgDescriptorExtractor(self.extractor, matcher)
         self.bowDescriptorExtractor.setVocabulary(vocabulary)
 
-    def __init__(self, images, cluster_size, matcher, extractor):
-        self.vocabulary = BOW.generate_vocabulary(images, cluster_size, extractor)
-        self.extractor = extractor
-        self.bowDescriptorExtractor = cv2.BOWImgDescriptorExtractor(self.extractor, matcher)
-        self.bowDescriptorExtractor.setVocabulary(self.vocabulary)
-
     def generate_histogram(self, image):
         features = self.extractor.detect(image)
         return self.bowDescriptorExtractor.compute(image, features)[0]

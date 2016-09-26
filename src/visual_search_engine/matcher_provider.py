@@ -11,6 +11,7 @@ class MatcherProvider:
     @classmethod
     def get_matcher_type(cls, params):
         matcher = params['matcherType']
+        params.pop('normType')
         params.pop('matcherType')
         return matcher
 
