@@ -1,5 +1,6 @@
 import argparse
 import logging
+from utils.utils import get_logger
 from visual_search_engine.config import load_config
 from visual_search_engine.file_utils import load
 from visual_search_engine.web.web_app import start
@@ -22,17 +23,23 @@ def config_logger(config):
     log_file = 'log'
     if config['web']['log_file']:
         log_file = config['web']['log_file']
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logging.basicConfig(filename=log_file, log_level=getattr(logging, log_level), format=formatter)
+    log = get_logger('web', logging.DEBUG)
+    fh = logging.FileHandler(log_file)
+    fh.setLevel(logging.DEBUG)
+    log.addHandler(fh)
+    ch = logging.StreamHandler()
+    ch.setLevel(getattr(logging, log_level))
+    log.addHandler(ch)
+    return log
 
 
 if __name__ == '__main__':
     params = parse_parameters()
     configuration = load_config(params.config)
     vocabulary = load(params.vocabulary)
+    log = config_logger(configuration)
     search_engine = VisualSearchEngine(vocabulary, configuration)
-    config_logger(configuration)
-    logging.info('web server start...')
-    start(search_engine, configuration.web.host, configuration.web.port, params.debug)
+    log.info('web server start...')
+    start(search_engine, configuration['web']['host'], configuration['web']['port'], params.debug)
 
 

@@ -10,14 +10,14 @@ class MatcherProvider:
 
     @classmethod
     def get_matcher_type(cls, params):
-        matcher = params['matcherType']
-        params.pop('normType')
-        params.pop('matcherType')
+        matcher = params['matcher_type']
+        params.pop('norm_type')
+        params.pop('matcher_type')
         return matcher
 
     DEFAULT_FLANN__PARAMS = {
-        'matcherType': 'FlannBasedMatcher',
-        'normType': cv2.NORM_L2,
+        'matcher_type': 'FlannBasedMatcher',
+        'norm_type': cv2.NORM_L2,
         'searchParams': {},
         'indexParams': dict(algorithm=0, trees=5)
     }
