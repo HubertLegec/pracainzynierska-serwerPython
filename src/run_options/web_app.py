@@ -33,13 +33,20 @@ def config_logger(config):
     return log
 
 
+def load_files_to_repository(config, search_engine):
+    files_dir = config['web']['files_dir']
+    if files_dir:
+        search_engine.add_images_in_batch(files_dir)
+
+
 if __name__ == '__main__':
     params = parse_parameters()
     configuration = load_config(params.config)
     vocabulary = load(params.vocabulary)
     log = config_logger(configuration)
     search_engine = VisualSearchEngine(vocabulary, configuration)
-    log.info('web server start...')
+    load_files_to_repository(configuration, search_engine)
+    log.info('Web server start...')
     start(search_engine, configuration['web']['host'], configuration['web']['port'], params.debug)
 
 
