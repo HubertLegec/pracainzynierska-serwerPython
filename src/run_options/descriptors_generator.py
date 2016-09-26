@@ -1,8 +1,14 @@
 import glob
 import pickle
 import argparse
+import logging
 from visual_search_engine import *
 from visual_search_engine.config import load_config
+from utils.utils import get_logger
+
+# ------------ logger -----------------
+log = get_logger('descriptors_generator', logging.INFO)
+# -------------------------------------
 
 
 def parse_parameters():
@@ -20,7 +26,7 @@ def parse_parameters():
 def save_descriptors(descriptors, fileName):
     with open(fileName, 'wb') as f:
         pickle.dump(descriptors, f, pickle.HIGHEST_PROTOCOL)
-        print("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
+        log.info("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
 
 
 def get_max_descriptors(optional_limit):
@@ -35,20 +41,26 @@ DEFAULT_MAX_DESCRIPTORS = 2000
 if __name__ == "__main__":
     params = parse_parameters()
     config = load_config(params.config)
-    descriptors = []
-    extractor = ExtractorProvider.get_extractor(config['extractor'])
+    total_descriptors = []
+    extractorConfig = config['extractor']
+    extractor = ExtractorProvider.get_extractor(extractorConfig)
     images_directory = params.images
+    log.info('Images directory: ' + images_directory)
     files = sorted(glob.glob(images_directory + FILE_PATTERN))
     number_of_descriptors = 0
     max_descriptors = get_max_descriptors(params.maxDescriptors)
+    log.info('Max number of descriptors: ' + str(max_descriptors))
     for fileName in files:
         try:
             image = load_grayscale_img(fileName)
-            single_img_descriptors = extractor.detectAndCompute(image, None)[1]
-            descriptors.extend(single_img_descriptors)
-            number_of_descriptors += len(single_img_descriptors)
+            # result[0] - keypoints
+            # result[1] - descriptors : numpy array of shape Number_of_Keypoints×128
+            descriptors = extractor.detectAndCompute(image, None)[1]
+            total_descriptors.extend(descriptors)
+            number_of_descriptors += len(descriptors)
+            log.info('File: ' + fileName + ', descriptors found: ' + str(len(descriptors)))
             if number_of_descriptors > max_descriptors:
                 break
         except SearchEngineError as e:
-            print(e.message)
-    save_descriptors(descriptors, params.save)
+            log.error(e.message)
+    save_descriptors(total_descriptors, params.save)
