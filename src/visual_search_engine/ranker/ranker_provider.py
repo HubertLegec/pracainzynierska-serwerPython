@@ -1,4 +1,4 @@
-from visual_search_engine.ranker import SimpleRanker
+from visual_search_engine.ranker import SimpleRanker, TFIDFRanker
 
 
 class RankerProvider:
@@ -13,6 +13,8 @@ class RankerProvider:
     def get_by_mode(cls, mode, method):
         if mode == 'SIMPLE':
             return SimpleRanker(method)
+        elif mode == 'TFIDF':
+            return TFIDFRanker(method)
         return None
 
     DEFAULT_PARAMS = {

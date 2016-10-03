@@ -14,8 +14,9 @@ class SimpleRanker(Ranker):
         for file_name, hist in repository.find(histogram):
             match_rate = Ranker.get_match_rate(histogram, hist, self.method)
             result.append((match_rate, file_name))
-        limited_result = self.get_limited_result(result, limit)
+        limited_result = SimpleRanker.get_limited_result(result, limit)
         return [pair[1] for pair in limited_result]
 
-    def get_limited_result(self, result, limit):
+    @staticmethod
+    def get_limited_result(result, limit):
         return heapq.nsmallest(limit, result, key=lambda pair: pair[0])

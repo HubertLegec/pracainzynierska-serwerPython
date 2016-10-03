@@ -20,10 +20,14 @@ class Ranker(ABC):
 
     @abstractmethod
     def rank(self, histogram, repository, limit):
+        """Ranks images in index based on similarity to given histogram.
+            :return list of tuples: (ratio, filename)
+        """
         pass
 
     @abstractmethod
     def update(self, repository):
+        """Should be invoked after image index change - ranker parameters update"""
         pass
 
     @staticmethod
