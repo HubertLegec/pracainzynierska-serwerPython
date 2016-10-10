@@ -17,7 +17,7 @@ class RepositoryProvider:
     @classmethod
     def get_by_type(cls, type, params):
         if type == 'SIMPLE':
-            return SimpleRepository(params.directory)
+            return SimpleRepository(params['directory'])
         return None
 
     DEFAULT_PARAMS = {

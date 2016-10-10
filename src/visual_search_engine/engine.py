@@ -12,7 +12,7 @@ class VisualSearchEngine:
     FILE_PATTERN = '*.jpg'
     log = logging.getLogger('web.VSE')
 
-    def __init__(self, vocabulary, configuration):
+    def __init__(self, vocabulary, configuration={}):
         self.bow = BOWProvider.get_bow(vocabulary, configuration['extractor'], configuration['matcher'])
         self.repository = RepositoryProvider.get_repository(configuration['repository'])
         self.ranker = RankerProvider.get_ranker(configuration['ranker'])

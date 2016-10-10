@@ -6,6 +6,11 @@ IMAGE_MAX_SIZE = 800
 IMAGE_MIN_SIZE = 400
 
 
+def load_grayscale_images(filenames):
+    for filename in filenames:
+        yield load_grayscale_img(filename)
+
+
 def load_grayscale_img(path):
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     if img is None:

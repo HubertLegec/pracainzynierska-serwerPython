@@ -19,5 +19,5 @@ def start(search_engine, host='127.0.0.1', port=9000, debug=False):
     api.add_resource(Searcher, '/find', '/find/<int:limit>',
                      resource_class_kwargs={'api': api, 'search_engine': search_engine})
     api.add_resource(ImageRepository, '/upload/<path:name>',
-                     resource_class_kwargs={'search_engine': search_engine})
+                     resource_class_kwargs={'api': api, 'search_engine': search_engine})
     app.run(host, port, debug)
