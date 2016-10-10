@@ -88,5 +88,8 @@ ENV/
 # Rope project settings
 .ropeproject
 
-
+/.idea/
 /input/
+/src/run_options/vocabulary
+/src/run_options/logs
+/src/run_options/result
