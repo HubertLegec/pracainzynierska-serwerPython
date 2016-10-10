@@ -5,11 +5,11 @@ class MatcherProvider:
     @classmethod
     def get_matcher(cls, params=None):
         params = params or cls.DEFAULT_FLANN__PARAMS
-        matcher_type = cls.get_matcher_type(params)
+        matcher_type = cls._get_matcher_type(params)
         return getattr(cv2, matcher_type)(**params)
 
     @classmethod
-    def get_matcher_type(cls, params):
+    def _get_matcher_type(cls, params):
         matcher = params['matcher_type']
         params.pop('norm_type')
         params.pop('matcher_type')
