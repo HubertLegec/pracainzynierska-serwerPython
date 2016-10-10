@@ -1,12 +1,13 @@
+from visual_search_engine.repository.error import NoSuchRepositoryTypeError
 from visual_search_engine.repository.simple_repository import SimpleRepository
 
 
 class RepositoryProvider:
     @classmethod
-    def get_repository(cls, params):
+    def get_repository(cls, params=None):
         params = params or cls.DEFAULT_PARAMS
         type = cls.get_repository_type(params)
-        return cls.get_by_type(type, params)
+        return cls._get_by_type(type, params)
 
     @classmethod
     def get_repository_type(cls, params):
@@ -15,10 +16,11 @@ class RepositoryProvider:
         return repository
 
     @classmethod
-    def get_by_type(cls, type, params):
+    def _get_by_type(cls, type, params):
         if type == 'SIMPLE':
             return SimpleRepository(params['directory'])
-        return None
+        else:
+            raise NoSuchRepositoryTypeError(type)
 
     DEFAULT_PARAMS = {
         'type': 'SIMPLE',
