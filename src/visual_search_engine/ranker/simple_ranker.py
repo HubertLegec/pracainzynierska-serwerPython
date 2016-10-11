@@ -1,4 +1,4 @@
-from visual_search_engine.ranker.ranker import Ranker
+from . import Ranker
 
 
 class SimpleRanker(Ranker):

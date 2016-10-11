@@ -1,8 +1,9 @@
 import logging
 from flask_restful import Resource, request
 from flask import send_file, make_response, jsonify
-from visual_search_engine.repository.error import NoSuchRepositoryEntryError, DuplicatedRepositoryEntryError
-from visual_search_engine.image_loader.error import ImgLoadError, ImgSizeError
+from visual_search_engine.repository.no_such_repository_entry_error import NoSuchRepositoryEntryError
+from visual_search_engine.repository.duplicated_repository_entry_error import DuplicatedRepositoryEntryError
+from visual_search_engine.image_loader import ImgLoadError, ImgSizeError
 
 
 class ImageRepository(Resource):

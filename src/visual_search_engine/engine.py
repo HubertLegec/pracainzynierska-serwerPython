@@ -1,9 +1,11 @@
 import glob
+import logging
+
+from visual_search_engine.bow import BOWProvider
 from visual_search_engine.error import SearchEngineError
-from visual_search_engine.bow_provider import *
+from visual_search_engine.image_loader import load_grayscale_image_from_buffer, load_grayscale_img
+from visual_search_engine.ranker import RankerProvider
 from visual_search_engine.repository.repository_provider import RepositoryProvider
-from visual_search_engine.ranker.ranker_provider import RankerProvider
-from visual_search_engine.image_loader.image_loader import load_grayscale_image_from_buffer, load_grayscale_img
 
 __version__ = 0.1
 

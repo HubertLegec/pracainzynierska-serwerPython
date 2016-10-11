@@ -3,11 +3,12 @@ import json
 import cv2
 
 from visual_search_engine import VisualSearchEngine
-from visual_search_engine import load_grayscale_images, BOW
+from visual_search_engine.image_loader import load_grayscale_images
+from visual_search_engine.bow import BOW
 from visual_search_engine.config import load_config
 from visual_search_engine.web import web_app
-from visual_search_engine.web.repository import ImageRepository
-from visual_search_engine.web.search import Searcher
+from visual_search_engine.web import ImageRepository
+from visual_search_engine.web import Searcher
 
 
 class VseRestApiTest(unittest.TestCase):

@@ -1,7 +1,7 @@
 import logging
 from flask_restful import Resource
 from flask import request, make_response, jsonify
-from visual_search_engine.web.repository import ImageRepository
+from . import ImageRepository
 
 
 class Searcher(Resource):

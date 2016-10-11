@@ -1,6 +1,7 @@
 import cv2
 import numpy
-from visual_search_engine.image_loader import *
+from . import ImgLoadError
+from . import ImgSizeError
 
 IMAGE_MAX_SIZE = 800
 IMAGE_MIN_SIZE = 400

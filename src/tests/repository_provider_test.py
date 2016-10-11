@@ -2,7 +2,7 @@ import unittest
 
 from tests.utils import get_object_name_with_package
 from visual_search_engine import RepositoryProvider
-from visual_search_engine.repository.error import NoSuchRepositoryTypeError
+from visual_search_engine.repository.no_such_repository_type_error import NoSuchRepositoryTypeError
 
 
 class RepositoryProviderTest(unittest.TestCase):

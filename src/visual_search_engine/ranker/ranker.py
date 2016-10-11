@@ -2,7 +2,7 @@ import cv2
 import heapq
 from abc import ABC, abstractmethod
 from scipy.spatial import distance
-from visual_search_engine.ranker.error import UnsupportedComparisonMethodError
+from visual_search_engine.ranker import UnsupportedComparisonMethodError
 
 
 OPENCV_COMPARISON_METHODS = {

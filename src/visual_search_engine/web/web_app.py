@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, make_response
 from flask_restful import Api
-from visual_search_engine.web.search import Searcher
-from visual_search_engine.web.repository import ImageRepository
+from . import Searcher
+from . import ImageRepository
 
 app = Flask('Visual Search Engine')
 api = Api(app)

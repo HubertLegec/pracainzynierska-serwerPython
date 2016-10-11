@@ -1,6 +1,7 @@
 import os
 from visual_search_engine.repository.repository import Repository
-from visual_search_engine.repository.error import DuplicatedRepositoryEntryError, NoSuchRepositoryEntryError
+from visual_search_engine.repository.duplicated_repository_entry_error import DuplicatedRepositoryEntryError
+from visual_search_engine.repository.no_such_repository_entry_error import NoSuchRepositoryEntryError
 from visual_search_engine.file_utils import save
 
 

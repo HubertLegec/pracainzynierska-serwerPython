@@ -4,7 +4,8 @@ import unittest
 import os
 from os import path
 
-from visual_search_engine.repository import SimpleRepository, normalize_dir_path
+from visual_search_engine.file_utils import normalize_dir_path
+from visual_search_engine.repository.simple_repository import SimpleRepository
 
 
 class SimpleRepositoryTest(unittest.TestCase):
