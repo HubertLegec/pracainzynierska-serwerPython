@@ -1,7 +1,7 @@
 import unittest
 
 from tests.utils import get_object_name_with_package
-from visual_search_engine import RankerProvider
+from visual_search_engine.ranker import RankerProvider
 
 
 class RankerProviderTest(unittest.TestCase):

@@ -1,7 +1,8 @@
-from visual_search_engine.file_utils import normalize_dir_path, remove_dir
-from abc import abstractmethod
-import os
 import atexit
+import os
+from abc import abstractmethod
+
+from visual_search_engine.utils import remove_dir, normalize_dir_path
 
 
 class Repository:

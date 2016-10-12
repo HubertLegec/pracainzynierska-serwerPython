@@ -1,5 +1,5 @@
-from visual_search_engine.repository.no_such_repository_type_error import NoSuchRepositoryTypeError
-from visual_search_engine.repository.simple_repository import SimpleRepository
+from .no_such_repository_type_error import NoSuchRepositoryTypeError
+from .simple_repository import SimpleRepository
 
 
 class RepositoryProvider:

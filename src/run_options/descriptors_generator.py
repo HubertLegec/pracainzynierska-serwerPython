@@ -1,10 +1,11 @@
-import glob
-import pickle
 import argparse
+import glob
 import logging
+import pickle
+
 from visual_search_engine import *
 from visual_search_engine.config import load_config
-from utils.utils import get_logger
+from visual_search_engine.utils.logger_utils import get_logger
 
 # ------------ logger -----------------
 log = get_logger('descriptors_generator', logging.INFO)

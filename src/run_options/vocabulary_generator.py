@@ -1,8 +1,8 @@
-import pickle
 import argparse
 import logging
-from visual_search_engine import *
-from utils.utils import get_logger
+import pickle
+
+from visual_search_engine.utils.logger_utils import get_logger
 
 # ------------ logger -----------------
 log = get_logger('vocabulary_generator', logging.INFO)

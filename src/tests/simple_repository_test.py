@@ -1,11 +1,11 @@
+import os
 import shutil
 import tempfile
 import unittest
-import os
 from os import path
 
-from visual_search_engine.file_utils import normalize_dir_path
 from visual_search_engine.repository.simple_repository import SimpleRepository
+from visual_search_engine.utils import normalize_dir_path
 
 
 class SimpleRepositoryTest(unittest.TestCase):

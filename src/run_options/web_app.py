@@ -1,10 +1,12 @@
 import argparse
 import logging
-from utils.utils import get_logger
-from visual_search_engine.config import load_config
-from visual_search_engine.file_utils import load
-from visual_search_engine.web.web_app import start
+
+from utils.file_utils import load
+
 from visual_search_engine import VisualSearchEngine
+from visual_search_engine.config import load_config
+from visual_search_engine.utils.logger_utils import get_logger
+from visual_search_engine.web.web_app import start
 
 
 def parse_parameters():
