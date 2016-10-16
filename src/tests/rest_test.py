@@ -9,6 +9,7 @@ from visual_search_engine.config import load_config
 from visual_search_engine.web import web_app
 from visual_search_engine.web import ImageRepository
 from visual_search_engine.web import Searcher
+from tests.utils import get_image_name_from_url
 
 
 class VseRestApiTest(unittest.TestCase):
@@ -47,24 +48,32 @@ class VseRestApiTest(unittest.TestCase):
 
     def test_should_return_empty_result_list(self):
         result = self.client.get('/find', data=self.test_img_1, headers={'Content-Type': 'application/octet-stream'})
-        msg = json.loads(result.data.decode())
         self.assertEqual(200, result.status_code)
-        self.assertEqual({'images': []}, msg)
+        self.assert_result_contains(result, [])
 
     def test_should_return_list_with_the_same_image(self):
-        upload_result = self.client.post('/upload/test_image.jpg',
-                                         data=self.test_img_1,
-                                         headers={'Content-Type': 'application/octet-stream'})
+        upload_result = self.upload_image(self.TEST_IMAGE_2, self.test_img_2)
+        self.assert_added(upload_result)
+        upload_result = self.upload_image(self.TEST_IMAGE_1, self.test_img_1)
         self.assert_added(upload_result)
         find_result = self.client.get('/find',
                                       data=self.test_img_1,
                                       headers={'Content-Type': 'application/octet-stream'})
         self.assertEqual(200, find_result.status_code)
+        self.assert_result_contains(find_result, [self.TEST_IMAGE_1, self.TEST_IMAGE_2])
 
     def assert_added(self, response):
         self.assertEqual(201, response.status_code, msg='HTTP Status')
         msg = json.loads(response.data.decode())
         self.assertEqual(msg, {'message': 'Image added'}, msg='JSON message')
+
+    def assert_result_contains(self, response, image_list):
+        msg = json.loads(response.data.decode())
+        names_without_urls = [get_image_name_from_url(url) for url in msg['images']]
+        self.assertEqual(names_without_urls, image_list)
+
+    def upload_image(self, name, image):
+        return self.client.post('/upload/' + name, data=image, headers={'Content-Type': 'application/octet-stream'})
 
 
 if __name__ == '__main__':
