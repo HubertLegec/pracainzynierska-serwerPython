@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from os import path
 
+from visual_search_engine.repository.duplicated_repository_entry_error import DuplicatedRepositoryEntryError
 from visual_search_engine.repository.simple_repository import SimpleRepository
 from visual_search_engine.utils import normalize_dir_path
 
@@ -51,6 +52,21 @@ class SimpleRepositoryTest(unittest.TestCase):
         elements = repository.elements.items()
         self.assertEqual(0, len(elements))
         self.assertTrue(not os.listdir(repository.repository_dir))
+
+    def test_add_the_same_element_should_fail(self):
+        repository = SimpleRepository(self.temp_root)
+        repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
+        elements = repository.elements.items()
+        self.assertEqual(1, len(elements))
+        self.assertRaises(DuplicatedRepositoryEntryError, repository.add, self.TEST_IMAGE_1, self.test_img_1, {})
+
+    def test_find_should_return_all_elements(self):
+        repository = SimpleRepository(self.temp_root)
+        repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
+        repository.add(self.TEST_IMAGE_2, self.test_img_1, {})
+        elements = repository.elements.items()
+        self.assertEqual(2, len(elements))
+        self.assertEqual(elements, repository.find({}))
 
 
 if __name__ == '__main__':
