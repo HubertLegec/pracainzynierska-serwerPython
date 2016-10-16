@@ -1,11 +1,13 @@
 import glob
 import logging
+import os
 
 from .bow import BOWProvider
 from .error import SearchEngineError
 from .image_loader import load_grayscale_image_from_buffer, load_grayscale_img
 from .ranker import RankerProvider
 from .repository.repository_provider import RepositoryProvider
+from .utils import get_image_name_from_url
 
 __version__ = 0.1
 
@@ -33,6 +35,8 @@ class VisualSearchEngine:
         self.ranker.update(self.repository)
 
     def add_images_in_batch(self, images_dir):
+        if not os.path.isdir(images_dir):
+            raise IOError("The folder " + images_dir + " doesn't exist");
         VisualSearchEngine.log.info('Adding all jpg images from directory: ' + images_dir)
         files = sorted(glob.glob(images_dir + VisualSearchEngine.FILE_PATTERN))
         counter = 0
@@ -40,7 +44,8 @@ class VisualSearchEngine:
             try:
                 image = load_grayscale_img(fileName)
                 histogram = self.bow.generate_histogram(image)
-                self.repository.add(fileName, image, histogram)
+                name_without_dir = get_image_name_from_url(fileName)
+                self.repository.add(name_without_dir, image, histogram)
                 counter += 1
             except SearchEngineError as e:
                 VisualSearchEngine.log.error(e.message)

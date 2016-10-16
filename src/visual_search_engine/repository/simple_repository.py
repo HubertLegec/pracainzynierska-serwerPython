@@ -8,7 +8,6 @@ from .repository import Repository
 
 class SimpleRepository(Repository):
     def __init__(self, repository_path='index/'):
-        self.elements = {}
         Repository.__init__(self, repository_path)
 
     def find(self, histogram):

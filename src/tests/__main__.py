@@ -6,6 +6,7 @@ from tests.matcher_provider_test import *
 from tests.extractor_provider_test import *
 from tests.ranker_provider_test import *
 from tests.repository_provider_test import *
+from tests.vse_simple_ranker_integration_test import *
 
 """Run all tests"""
 if __name__ == '__main__':

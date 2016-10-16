@@ -10,6 +10,7 @@ class Repository:
         self.repository_dir = normalize_dir_path(repository_path)
         remove_dir(repository_path)
         os.makedirs(repository_path)
+        self.elements = {}
         atexit.register(remove_dir, repository_path)
 
     @abstractmethod

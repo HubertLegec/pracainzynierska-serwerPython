@@ -24,7 +24,7 @@ class VseRestApiTest(unittest.TestCase):
         with open(cls.TEST_IMAGE_2, 'rb') as file2:
             cls.test_img_2 = file2.read()
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = load_grayscale_images([cls.TEST_IMAGE_1])
+        images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
         config = load_config('test_config.ini')
         search_engine = VisualSearchEngine(cls.vocabulary, config)

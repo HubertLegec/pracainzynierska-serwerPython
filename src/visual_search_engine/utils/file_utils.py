@@ -30,3 +30,10 @@ def remove_dir(dir_path):
     except OSError as e:
         logging.info("Error during removing directory '" + dir_path + "'")
         return
+
+
+def get_image_name_from_url(url):
+    start_name_idx = url.rfind('/')
+    if start_name_idx < 0:
+        return url
+    return url[start_name_idx + 1:]

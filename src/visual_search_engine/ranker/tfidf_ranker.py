@@ -12,7 +12,7 @@ class TFIDFRanker(Ranker):
         Ranker.__init__(self, method)
 
     def update(self, repository):
-        vector_before_normalization = [sum(x) for x in repository.values()]
+        vector_before_normalization = [sum(x) for x in repository.elements.values()]
         self.vector = TFIDFRanker._normalize_vector(vector_before_normalization)
 
     def rank(self, histogram, repository, limit):
@@ -28,6 +28,9 @@ class TFIDFRanker(Ranker):
         for i, val in enumerate(histogram):
             weighted_histogram.insert(i, -val * math.log(self.vector[i], 10))
         return TFIDFRanker._normalize_vector(weighted_histogram)
+
+    def calculate_tf(self, histogram, idx):
+        return histogram[idx] /
 
     @staticmethod
     def _normalize_vector(vector):
