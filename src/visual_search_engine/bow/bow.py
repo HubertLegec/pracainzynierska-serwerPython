@@ -6,6 +6,7 @@ class BOW:
     def __init__(self, vocabulary, matcher, extractor):
         self.vocabulary = vocabulary
         self.extractor = extractor
+        self.matcher = matcher
         self.bowDescriptorExtractor = cv2.BOWImgDescriptorExtractor(self.extractor, matcher)
         self.bowDescriptorExtractor.setVocabulary(vocabulary)
 

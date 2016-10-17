@@ -6,9 +6,13 @@ from visual_search_engine import VisualSearchEngine
 from visual_search_engine.image_loader import load_grayscale_images
 from visual_search_engine.bow import BOW
 from visual_search_engine.config import load_config
+from visual_search_engine.matcher import MatcherProvider
 from visual_search_engine.web import web_app
 from visual_search_engine.web import ImageRepository
 from visual_search_engine.web import Searcher
+from visual_search_engine.web import VocabularyData
+from visual_search_engine.web import ExtractorData
+from visual_search_engine.web import MatcherData
 from tests.utils import get_image_name_from_url
 
 
@@ -27,6 +31,7 @@ class VseRestApiTest(unittest.TestCase):
         images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
         config = load_config('test_config.ini')
+        matcher_config = config.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
         search_engine = VisualSearchEngine(cls.vocabulary, config)
         cls.app = web_app.app
         cls.app.testing = True
@@ -35,6 +40,12 @@ class VseRestApiTest(unittest.TestCase):
                              resource_class_kwargs={'api': cls.api, 'search_engine': search_engine})
         cls.api.add_resource(ImageRepository, '/upload/<path:name>',
                              resource_class_kwargs={'api': cls.api, 'search_engine': search_engine})
+        cls.api.add_resource(VocabularyData, '/data/vocabulary',
+                             resource_class_kwargs={'vocabulary': cls.vocabulary})
+        cls.api.add_resource(ExtractorData, '/data/extractor',
+                             resource_class_kwargs={'extractor': search_engine.bow.extractor})
+        cls.api.add_resource(MatcherData, '/data/matcher',
+                             resource_class_kwargs={'matcher': matcher_config})
         cls.app_context = web_app.app.app_context()
 
     @classmethod
@@ -45,6 +56,21 @@ class VseRestApiTest(unittest.TestCase):
     @classmethod
     def tearDown(cls):
         cls.app_context.pop()
+
+    def test_should_return_vocabulary(self):
+        result = self.client.get('/data/vocabulary')
+        self.assertEqual(200, result.status_code)
+        # TODO - improve test
+
+    def test_should_return_extractor(self):
+        result = self.client.get('/data/extractor')
+        self.assertEqual(200, result.status_code)
+        # TODO - improve test
+
+    def test_should_return_matcher(self):
+        result = self.client.get('/data/matcher')
+        self.assertEqual(200, result.status_code)
+        # TODO - improve test
 
     def test_should_return_empty_result_list(self):
         result = self.client.get('/find', data=self.test_img_1, headers={'Content-Type': 'application/octet-stream'})

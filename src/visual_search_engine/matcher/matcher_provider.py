@@ -5,8 +5,9 @@ class MatcherProvider:
     @classmethod
     def get_matcher(cls, params=None):
         params = params or cls.DEFAULT_FLANN__PARAMS
-        matcher_type = cls._get_matcher_type(params)
-        return getattr(cv2, matcher_type)(**params)
+        params_copy = params.copy()
+        matcher_type = cls._get_matcher_type(params_copy)
+        return getattr(cv2, matcher_type)(**params_copy)
 
     @classmethod
     def _get_matcher_type(cls, params):

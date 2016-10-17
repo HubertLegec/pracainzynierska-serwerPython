@@ -1,12 +1,13 @@
 import argparse
 import logging
 
-from utils.file_utils import load
+from visual_search_engine.utils import load
 
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.config import load_config
 from visual_search_engine.utils.logger_utils import get_logger
 from visual_search_engine.web.web_app import start
+from visual_search_engine.matcher import MatcherProvider
 
 
 def parse_parameters():
@@ -36,7 +37,7 @@ def config_logger(config):
 
 
 def load_files_to_repository(config, search_engine):
-    files_dir = config['web']['files_dir']
+    files_dir = config['web'].get('files_dir', None)
     if files_dir:
         search_engine.add_images_in_batch(files_dir)
 
@@ -49,6 +50,13 @@ if __name__ == '__main__':
     search_engine = VisualSearchEngine(vocabulary, configuration)
     load_files_to_repository(configuration, search_engine)
     log.info('Web server start...')
-    start(search_engine, configuration['web']['host'], configuration['web']['port'], params.debug)
+    start(
+        search_engine,
+        vocabulary,
+        configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS),
+        configuration['web']['host'],
+        configuration['web']['port'],
+        params.debug
+    )
 
 

@@ -29,8 +29,21 @@ class TFIDFRanker(Ranker):
             weighted_histogram.insert(i, -val * math.log(self.vector[i], 10))
         return TFIDFRanker._normalize_vector(weighted_histogram)
 
-    def calculate_tf(self, histogram, idx):
-        return histogram[idx] /
+    @classmethod
+    def calculate_tf(cls, histogram, idx):
+        return histogram[idx] / sum(histogram)
+
+    @classmethod
+    def calculate_idf(cls, repository, idx):
+        occurrence_counter = 0
+        for histogram in repository:
+            if histogram[idx] > 0:
+                occurrence_counter += 1
+        return math.log10(len(repository) / occurrence_counter)
+
+    @classmethod
+    def calculate_tfidf(cls, repository, histogram, idx):
+        return cls.calculate_tf(repository, histogram, idx) * cls.calculate_idf(repository, idx)
 
     @staticmethod
     def _normalize_vector(vector):
