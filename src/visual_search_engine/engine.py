@@ -25,6 +25,9 @@ class VisualSearchEngine:
         VisualSearchEngine.log.info("Find images request with limit " + str(limit))
         img = load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
+        return self.find_by_histogram(histogram, limit)
+
+    def find_by_histogram(self, histogram, limit=5):
         return self.ranker.rank(histogram, self.repository, limit)
 
     def add_new_image(self, image, name):

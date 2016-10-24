@@ -34,9 +34,8 @@ class ImageRepository(Resource):
         self.log.info('Removing image: ' + name)
         try:
             self.search_engine.repository.remove(name)
-            json = jsonify(message='Image removed')
             self.log.info('Image ' + name + ' removed')
-            return make_response(json, 200)
+            return make_response('Image removed', 200)
         except NoSuchRepositoryEntryError as e:
             raise FileNotFoundError
 
