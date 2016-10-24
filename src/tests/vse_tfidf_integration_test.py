@@ -23,10 +23,10 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
         extractor = cv2.xfeatures2d.SIFT_create()
         images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
-        cls.config = load_config('tfidf_test_config.ini')
 
     @classmethod
     def setUp(cls):
+        cls.config = load_config('tfidf_test_config.ini')
         cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)
         cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
 
@@ -41,7 +41,7 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
     def test_engine_returns_suitable_elements(self):
         result = self.searchEngine.find(self.test_img_1, 4)
         self.assertTrue(4, len(result))
-        expected_result = ['ukbench00004.jpg', 'ukbench00006.jpg', 'ukbench00007.jpg', 'ukbench00005.jpg']
+        expected_result = ['ukbench00006.jpg', 'ukbench00004.jpg', 'ukbench00005.jpg', 'ukbench00007.jpg']
         self.assertEqual(expected_result, result)
 
 if __name__ == '__main__':
