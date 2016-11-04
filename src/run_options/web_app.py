@@ -6,7 +6,7 @@ from visual_search_engine.utils import load
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.config import load_config
 from visual_search_engine.utils.logger_utils import get_logger
-from visual_search_engine.web.web_app import start
+from visual_search_engine.web.web_app import start, configure
 from visual_search_engine.matcher import MatcherProvider
 
 
@@ -42,7 +42,7 @@ def load_files_to_repository(config, search_engine):
         search_engine.add_images_in_batch(files_dir)
 
 
-if __name__ == '__main__':
+def load_app(autostart=True):
     params = parse_parameters()
     configuration = load_config(params.config)
     vocabulary = load(params.vocabulary)
@@ -50,13 +50,22 @@ if __name__ == '__main__':
     search_engine = VisualSearchEngine(vocabulary, configuration)
     load_files_to_repository(configuration, search_engine)
     log.info('Web server start...')
-    start(
-        search_engine,
-        vocabulary,
-        configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS),
-        configuration['web']['host'],
-        configuration['web']['port'],
-        params.debug
-    )
+    if autostart:
+        start(
+            search_engine,
+            vocabulary,
+            configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS),
+            configuration['web']['host'],
+            configuration['web']['port'],
+            params.debug
+        )
+    else:
+        return configure(
+            search_engine,
+            vocabulary,
+            configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
+        )
 
 
+if __name__ == '__main__':
+    load_app()

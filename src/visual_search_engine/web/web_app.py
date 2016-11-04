@@ -20,7 +20,12 @@ def not_found_handler(error):
     make_response(json, NOT_FOUND_ERROR)
 
 
-def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=9000, debug=False):
+@app.route('/healthCheck')
+def health_check():
+    return 'OK'
+
+
+def configure(search_engine, vocabulary, matcher):
     api.add_resource(VocabularyData, '/data/vocabulary',
                      resource_class_kwargs={'vocabulary': vocabulary})
     api.add_resource(ExtractorData, '/data/extractor',
@@ -33,4 +38,9 @@ def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=9000, debug
                      resource_class_kwargs={'search_engine': search_engine, 'api': api})
     api.add_resource(ImageRepository, '/upload/<path:name>',
                      resource_class_kwargs={'search_engine': search_engine})
-    app.run(host, port, debug)
+    return app
+
+
+def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=9000, debug=False):
+    application = configure(search_engine, vocabulary, matcher)
+    application.run(host, port, debug)
