@@ -9,11 +9,17 @@ from visual_search_engine.utils.logger_utils import get_logger
 from visual_search_engine.web.web_app import start, configure
 from visual_search_engine.matcher import MatcherProvider
 
+defaultParams = {
+    'config': 'config.ini',
+    'vocabulary': 'vocabulary',
+    'debug': False
+}
+
 
 def parse_parameters():
     parser = argparse.ArgumentParser(description='Visual search engine', formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-c', '--config', type=str, metavar='PATH', required=True, help='Path to configuration file')
-    parser.add_argument('-v', '--vocabulary', type=str, metavar='PATH', required=True,
+    parser.add_argument('-c', '--config', type=str, metavar='PATH', help='Path to configuration file')
+    parser.add_argument('-v', '--vocabulary', type=str, metavar='PATH',
                         help='Path to file with vocabulary')
     parser.add_argument('-d', '--debug', action='store_true', help='run in debug mode')
     return parser.parse_args()
@@ -42,8 +48,7 @@ def load_files_to_repository(config, search_engine):
         search_engine.add_images_in_batch(files_dir)
 
 
-def load_app(autostart=True):
-    params = parse_parameters()
+def load_app(autostart=False, params=defaultParams):
     configuration = load_config(params.config)
     vocabulary = load(params.vocabulary)
     log = config_logger(configuration)
@@ -68,4 +73,5 @@ def load_app(autostart=True):
 
 
 if __name__ == '__main__':
-    load_app()
+    params = parse_parameters()
+    load_app(True, params)
