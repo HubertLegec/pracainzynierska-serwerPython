@@ -41,6 +41,6 @@ def configure(search_engine, vocabulary, matcher):
     return app
 
 
-def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=9000, debug=False):
+def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=5000, debug=False):
     application = configure(search_engine, vocabulary, matcher)
     application.run(host, port, debug)

@@ -41,11 +41,11 @@ class VisualSearchEngine:
         if not os.path.isdir(images_dir):
             raise IOError("The folder " + images_dir + " doesn't exist");
         VisualSearchEngine.log.info('Adding all jpg images from directory: ' + images_dir)
-        files = sorted(glob.glob(images_dir + VisualSearchEngine.FILE_PATTERN))
+        files = sorted(glob.glob1(images_dir, VisualSearchEngine.FILE_PATTERN))
         counter = 0
         for fileName in files:
             try:
-                image = load_grayscale_img(fileName)
+                image = load_grayscale_img(images_dir + '/' + fileName)
                 histogram = self.bow.generate_histogram(image)
                 name_without_dir = get_image_name_from_url(fileName)
                 self.repository.add(name_without_dir, image, histogram)

@@ -4,7 +4,7 @@ from . import ImgLoadError
 from . import ImgSizeError
 
 IMAGE_MAX_SIZE = 1000
-IMAGE_MIN_SIZE = 500
+IMAGE_MIN_SIZE = 400
 
 
 def load_grayscale_images(filenames):

@@ -9,19 +9,14 @@ from visual_search_engine.utils.logger_utils import get_logger
 from visual_search_engine.web.web_app import start, configure
 from visual_search_engine.matcher import MatcherProvider
 
-defaultParams = {
-    'config': 'config.ini',
-    'vocabulary': 'vocabulary',
-    'debug': False
-}
 
-
-def parse_parameters():
+def parse_parameters(default_vocabulary, default_config):
     parser = argparse.ArgumentParser(description='Visual search engine', formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-c', '--config', type=str, metavar='PATH', help='Path to configuration file')
+    parser.add_argument('-c', '--config', type=str, metavar='PATH',
+                        help='Path to configuration file', default=default_config)
     parser.add_argument('-v', '--vocabulary', type=str, metavar='PATH',
-                        help='Path to file with vocabulary')
-    parser.add_argument('-d', '--debug', action='store_true', help='run in debug mode')
+                        help='Path to file with vocabulary', default=default_vocabulary)
+    parser.add_argument('-d', '--debug', action='store_true', help='run in debug mode', default=False)
     return parser.parse_args()
 
 
@@ -48,7 +43,7 @@ def load_files_to_repository(config, search_engine):
         search_engine.add_images_in_batch(files_dir)
 
 
-def load_app(autostart=False, params=defaultParams):
+def load_app(params, autostart=False):
     configuration = load_config(params.config)
     vocabulary = load(params.vocabulary)
     log = config_logger(configuration)
@@ -71,7 +66,3 @@ def load_app(autostart=False, params=defaultParams):
             configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
         )
 
-
-if __name__ == '__main__':
-    params = parse_parameters()
-    load_app(True, params)
