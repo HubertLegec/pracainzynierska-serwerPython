@@ -23,10 +23,10 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         extractor = cv2.xfeatures2d.SIFT_create()
         images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
-        cls.config = load_config('test_config.ini')
 
     @classmethod
     def setUp(cls):
+        cls.config = load_config('test_config.ini')
         cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)
         cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
 

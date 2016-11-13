@@ -1,3 +1,4 @@
+import io
 import unittest
 import json
 import cv2
@@ -73,7 +74,8 @@ class VseRestApiTest(unittest.TestCase):
         # TODO - improve test
 
     def test_should_return_empty_result_list(self):
-        result = self.client.post('/find', data=self.test_img_1, headers={'Content-Type': 'application/octet-stream'})
+        result = self.client.post('/find', buffered=True, data=dict(image=(io.BytesIO(self.test_img_1), 'testImg.jpg')),
+                                  headers={'Content-Type': 'multipart/form-data'})
         self.assertEqual(200, result.status_code)
         self.assert_result_contains(result, [])
 
@@ -82,9 +84,9 @@ class VseRestApiTest(unittest.TestCase):
         self.assert_added(upload_result)
         upload_result = self.upload_image(self.TEST_IMAGE_1, self.test_img_1)
         self.assert_added(upload_result)
-        find_result = self.client.post('/find',
-                                       data=self.test_img_1,
-                                       headers={'Content-Type': 'application/octet-stream'})
+        find_result = self.client.post('/find', buffered=True,
+                                       data=dict(image=(io.BytesIO(self.test_img_1), 'testImg.jpg')),
+                                       headers={'Content-Type': 'multipart/form-data'})
         self.assertEqual(200, find_result.status_code)
         self.assert_result_contains(find_result, [self.TEST_IMAGE_1, self.TEST_IMAGE_2])
 
