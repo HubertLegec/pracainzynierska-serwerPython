@@ -3,8 +3,8 @@ import numpy
 from . import ImgLoadError
 from . import ImgSizeError
 
-IMAGE_MAX_SIZE = 800
-IMAGE_MIN_SIZE = 400
+IMAGE_MAX_SIZE = 1000
+IMAGE_MIN_SIZE = 500
 
 
 def load_grayscale_images(filenames):

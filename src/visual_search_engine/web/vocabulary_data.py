@@ -12,4 +12,4 @@ class VocabularyData(Resource):
         vocabulary_list = [[v.item() for v in row] for row in self.vocabulary]
         json = jsonify(vocabulary=vocabulary_list)
         self.log.info('Vocabulary request')
-        return make_response(json, 200)
+        return json

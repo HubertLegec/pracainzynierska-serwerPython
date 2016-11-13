@@ -12,7 +12,8 @@ class Searcher(Resource):
 
     def post(self, limit=4):
         """Returns list of urls to images that matches payload, size of list is limited by <limit>"""
-        img_paths = self.search_engine.find(request.data, limit)
+        query_file = request.files['image'].read()
+        img_paths = self.search_engine.find(query_file, limit)
         img_urls = [self.create_url_for_path(path) for path in img_paths]
         return Searcher.create_json_response(img_urls)
 

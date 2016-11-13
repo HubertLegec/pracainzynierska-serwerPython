@@ -11,5 +11,5 @@ class MatcherData(Resource):
     def get(self):
         json = jsonify(matcher=self.matcher)
         self.log.info('Matcher data request')
-        return make_response(json, 200)
+        return json
 

@@ -11,7 +11,7 @@ class ExtractorData(Resource):
     def get(self):
         json = jsonify(extractor=self.extractor)
         self.log.info('Extractor data request')
-        return make_response(json, 200)
+        return json
 
     @classmethod
     def get_object_name_with_package(cls, obj):
