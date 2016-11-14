@@ -7,7 +7,7 @@ from .error import SearchEngineError
 from .image_loader import load_grayscale_image_from_buffer, load_grayscale_img
 from .ranker import RankerProvider
 from .repository.repository_provider import RepositoryProvider
-from .utils import get_image_name_from_url
+from .utils import get_image_name_from_url, load_file_bytes
 
 __version__ = 0.1
 
@@ -34,7 +34,7 @@ class VisualSearchEngine:
         VisualSearchEngine.log.info('Add new image with name ' + name + ' request')
         img = load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
-        self.repository.add(name, img, histogram)
+        self.repository.add(name, image, histogram)
         self.ranker.update(self.repository)
 
     def add_images_in_batch(self, images_dir):
@@ -45,8 +45,10 @@ class VisualSearchEngine:
         counter = 0
         for fileName in files:
             try:
-                image = load_grayscale_img(images_dir + '/' + fileName)
-                histogram = self.bow.generate_histogram(image)
+                img_path = images_dir + '/' + fileName
+                grayscale_image = load_grayscale_img(img_path)
+                image = load_file_bytes(img_path)
+                histogram = self.bow.generate_histogram(grayscale_image)
                 name_without_dir = get_image_name_from_url(fileName)
                 self.repository.add(name_without_dir, image, histogram)
                 counter += 1

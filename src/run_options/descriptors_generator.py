@@ -1,10 +1,10 @@
 import argparse
 import glob
 import logging
-import pickle
 
 from visual_search_engine import *
 from visual_search_engine.config import load_config
+from visual_search_engine.utils import save
 from visual_search_engine.utils.logger_utils import get_logger
 
 # ------------ logger -----------------
@@ -24,10 +24,9 @@ def parse_parameters():
     return parser.parse_args()
 
 
-def save_descriptors(descriptors, fileName):
-    with open(fileName, 'wb') as f:
-        pickle.dump(descriptors, f, pickle.HIGHEST_PROTOCOL)
-        log.info("Saved " + str(len(descriptors)) + " descriptors to '" + fileName + "'")
+def save_descriptors(descriptors, filename):
+    save(filename, descriptors)
+    log.info("Saved " + str(len(descriptors)) + " descriptors to '" + filename + "'")
 
 
 def get_max_descriptors(optional_limit):

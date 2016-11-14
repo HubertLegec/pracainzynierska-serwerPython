@@ -1,8 +1,8 @@
 import argparse
 import logging
-import pickle
 
 from visual_search_engine.utils.logger_utils import get_logger
+from visual_search_engine.utils import save, load
 
 # ------------ logger -----------------
 log = get_logger('vocabulary_generator', logging.INFO)
@@ -20,22 +20,15 @@ def parse_parameters():
     return parser.parse_args()
 
 
-def load_descriptors(file_name):
-    with open(file_name, 'rb') as f:
-        descriptors = pickle.load(f)
-    return descriptors
-
-
 def save_vocabulary(vocabulary, file_name):
     log.info("Saving vocabulary to '" + file_name + "'")
-    with open(file_name, 'wb') as f:
-        pickle.dump(vocabulary, f, pickle.HIGHEST_PROTOCOL)
+    save(file_name, vocabulary)
     log.info('Vocabulary saved.')
 
 
 if __name__ == "__main__":
     options = parse_parameters()
-    descriptors = load_descriptors(options.descriptors)
+    descriptors = load(options.descriptors)
     log.info('Generating vocabulary...')
     vocabulary = BOW.generate_vocabulary_from_descriptors(descriptors, 200)
     save_vocabulary(vocabulary, options.save)

@@ -1,6 +1,6 @@
 import os
 
-from visual_search_engine.utils import save
+from visual_search_engine.utils import save_file_bytes
 from .duplicated_repository_entry_error import DuplicatedRepositoryEntryError
 from .no_such_repository_entry_error import NoSuchRepositoryEntryError
 from .repository import Repository
@@ -16,7 +16,7 @@ class SimpleRepository(Repository):
     def add(self, name, image, histogram):
         if name in self.elements.keys():
             raise DuplicatedRepositoryEntryError(name)
-        save(self.repository_dir + name, image)
+        save_file_bytes(self.repository_dir + name, image)
         self.elements[name] = histogram
 
     def remove(self, name):

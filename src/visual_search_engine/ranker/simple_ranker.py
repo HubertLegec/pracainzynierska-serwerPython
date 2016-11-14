@@ -14,5 +14,5 @@ class SimpleRanker(Ranker):
             match_rate = Ranker.get_match_rate(histogram, hist, self.method)
             result.append((match_rate, file_name))
         limited_result = self.get_limited_result(result, limit)
-        return [pair[1] for pair in limited_result]
+        return limited_result
 

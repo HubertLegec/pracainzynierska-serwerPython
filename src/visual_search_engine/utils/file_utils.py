@@ -16,6 +16,19 @@ def save(path, data):
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
 
+def load_file_bytes(path):
+    with open(path, 'rb') as f:
+        content = f.read()
+    f.close()
+    return content
+
+
+def save_file_bytes(path, data):
+    with open(path, 'wb') as f:
+        f.write(data)
+    f.close()
+
+
 def normalize_dir_path(path):
     """Normalizes path to end with slash"""
     if len(path) > 0 and path[-1] != '/':
