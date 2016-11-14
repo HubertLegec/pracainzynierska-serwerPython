@@ -39,12 +39,14 @@ class VisualSearchEngine:
 
     def add_images_in_batch(self, images_dir):
         if not os.path.isdir(images_dir):
-            raise IOError("The folder " + images_dir + " doesn't exist");
+            raise IOError("The folder " + images_dir + " doesn't exist")
         VisualSearchEngine.log.info('Adding all jpg images from directory: ' + images_dir)
         files = sorted(glob.glob1(images_dir, VisualSearchEngine.FILE_PATTERN))
         counter = 0
+        VisualSearchEngine.log.info('There is ' + str(len(files)))
         for fileName in files:
             try:
+                VisualSearchEngine.log.info('Processing image:' + fileName)
                 img_path = images_dir + '/' + fileName
                 grayscale_image = load_grayscale_img(img_path)
                 image = load_file_bytes(img_path)
@@ -52,6 +54,7 @@ class VisualSearchEngine:
                 name_without_dir = get_image_name_from_url(fileName)
                 self.repository.add(name_without_dir, image, histogram)
                 counter += 1
+                VisualSearchEngine.log.info('Image added to repository: ' + fileName)
             except SearchEngineError as e:
                 VisualSearchEngine.log.error(e.message)
         VisualSearchEngine.log.info('Number of images added: ' + str(counter))
