@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import make_response, jsonify
+from flask import jsonify
 import logging
 
 
@@ -10,6 +10,11 @@ class VocabularyData(Resource):
 
     def get(self):
         vocabulary_list = [[v.item() for v in row] for row in self.vocabulary]
-        json = jsonify(vocabulary=vocabulary_list)
+        row_length = len(self.vocabulary[0])
+        size = len(self.vocabulary)
+        json = jsonify(
+            vocabulary=vocabulary_list,
+            size=size,
+            rowSize=row_length)
         self.log.info('Vocabulary request')
         return json
