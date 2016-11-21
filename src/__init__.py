@@ -1,6 +1,5 @@
 from run_options.web_app import load_app, parse_parameters
 
-
 params = parse_parameters('run_options/vocabulary', 'run_options/config.ini')
 
 app = load_app(params, False)

@@ -1,6 +1,5 @@
 import argparse
 import logging
-import os
 
 from visual_search_engine.utils import load
 
@@ -27,7 +26,7 @@ def config_logger(config):
         log_level = config['web']['log_level']
     log_file = 'log'
     if config['web']['log_file']:
-        log_file = config['current_directory'] + config['web']['log_file']
+        log_file = config['web']['log_file']
     log = get_logger('web', logging.DEBUG)
     fh = logging.FileHandler(log_file)
     fh.setLevel(logging.DEBUG)
@@ -41,14 +40,12 @@ def config_logger(config):
 def load_files_to_repository(config, search_engine):
     files_dir = config['web'].get('files_dir', None)
     if files_dir:
-        search_engine.add_images_in_batch(config['current_directory'] + files_dir)
+        search_engine.add_images_in_batch(files_dir)
 
 
 def load_app(params, autostart=False):
-    curr_dir = os.path.dirname(os.path.realpath(__file__))
     configuration = load_config(params.config)
-    configuration['current_directory'] = curr_dir
-    vocabulary = load(curr_dir + params.vocabulary)
+    vocabulary = load(params.vocabulary)
     log = config_logger(configuration)
     search_engine = VisualSearchEngine(vocabulary, configuration)
     load_files_to_repository(configuration, search_engine)
