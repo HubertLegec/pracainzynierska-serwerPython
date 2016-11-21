@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 
 from visual_search_engine.utils import load
 
@@ -43,7 +44,8 @@ def load_files_to_repository(config, search_engine):
         search_engine.add_images_in_batch(config['current_directory'] + files_dir)
 
 
-def load_app(params, curr_dir='./', autostart=False):
+def load_app(params, autostart=False):
+    curr_dir = os.path.dirname(os.path.realpath(__file__))
     configuration = load_config(params.config)
     configuration['current_directory'] = curr_dir
     vocabulary = load(curr_dir + params.vocabulary)
