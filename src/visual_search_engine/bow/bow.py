@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import logging
 
 
 class BOW:
@@ -9,10 +10,14 @@ class BOW:
         self.matcher = matcher
         self.bowDescriptorExtractor = cv2.BOWImgDescriptorExtractor(self.extractor, matcher)
         self.bowDescriptorExtractor.setVocabulary(vocabulary)
+        self.log = logging.getLogger('web.BOW')
 
     def generate_histogram(self, image):
+        self.log.info('generate histogram for image')
         features = self.extractor.detect(image)
-        return self.bowDescriptorExtractor.compute(image, features)[0]
+        histogram = self.bowDescriptorExtractor.compute(image, features)[0]
+        self.log.info('histogram ready')
+        return histogram
 
     @staticmethod
     def generate_vocabulary(images, cluster_size, extractor):

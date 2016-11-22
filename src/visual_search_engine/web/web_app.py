@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
 from flask_restful import Api
 from . import Searcher
 from . import ImageRepository
@@ -16,8 +16,7 @@ NOT_FOUND_ERROR = 404
 
 @app.errorhandler(NOT_FOUND_ERROR)
 def not_found_handler(error):
-    json = jsonify(request.url + ' not found')
-    make_response(json, NOT_FOUND_ERROR)
+    return jsonify(request.url + ' not found')
 
 
 @app.route('/healthCheck')

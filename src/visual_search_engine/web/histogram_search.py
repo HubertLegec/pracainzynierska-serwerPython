@@ -1,6 +1,6 @@
 import logging
 from flask_restful import Resource
-from flask import request, make_response, jsonify
+from flask import request, jsonify
 from . import ImageRepository
 
 
@@ -25,4 +25,4 @@ class HistogramSearcher(Resource):
     @classmethod
     def create_json_response(cls, urls):
         json = jsonify(images=urls)
-        return make_response(json, 200)
+        return json

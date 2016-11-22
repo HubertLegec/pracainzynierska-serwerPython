@@ -9,7 +9,7 @@ from visual_search_engine.image_loader import ImgLoadError, ImgSizeError
 class ImageRepository(Resource):
 
     def __init__(self, **kwargs):
-        self.log = logging.getLogger('ImageRepository')
+        self.log = logging.getLogger('web.ImageRepository')
         self.search_engine = kwargs['search_engine']
 
     def post(self, name):
@@ -35,7 +35,7 @@ class ImageRepository(Resource):
         try:
             self.search_engine.repository.remove(name)
             self.log.info('Image ' + name + ' removed')
-            return make_response('Image removed', 200)
+            return 'Image removed'
         except NoSuchRepositoryEntryError as e:
             raise FileNotFoundError
 

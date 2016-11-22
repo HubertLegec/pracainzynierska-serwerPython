@@ -1,5 +1,6 @@
 import cv2
 import heapq
+import logging
 from abc import ABC, abstractmethod
 from scipy.spatial import distance
 from visual_search_engine.ranker import UnsupportedComparisonMethodError
@@ -24,6 +25,7 @@ SCIPY_COMPARISON_METHODS = {
 class Ranker(ABC):
     def __init__(self, method='SIMPLE'):
         self.method = method
+        self.log = logging.getLogger('web.Ranker')
 
     @abstractmethod
     def rank(self, histogram, repository, limit):
@@ -41,8 +43,10 @@ class Ranker(ABC):
 
     def get_limited_result(self, result, limit):
         if self.method == 'CORRELATION' or self.method == 'INTERSECTION':
+            self.log.info('Get limited result: ' + str(limit) + ' largest')
             return heapq.nlargest(limit, result, key=lambda pair: pair[0])
         else:
+            self.log.info('Get limited result: ' + str(limit) + ' smallest')
             return heapq.nsmallest(limit, result, key=lambda pair: pair[0])
 
     @staticmethod
