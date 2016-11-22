@@ -14,15 +14,15 @@ __version__ = 0.1
 
 class VisualSearchEngine:
     FILE_PATTERN = '*.jpg'
-    log = logging.getLogger('web.VSE')
 
     def __init__(self, vocabulary, configuration={}):
         self.bow = BOWProvider.get_bow(vocabulary, configuration['extractor'], configuration['matcher'])
         self.repository = RepositoryProvider.get_repository(configuration['repository'])
         self.ranker = RankerProvider.get_ranker(configuration['ranker'])
+        self.log = logging.getLogger('web.VSE')
 
     def find(self, image, limit=5):
-        VisualSearchEngine.log.info("Find images request with limit " + str(limit))
+        self.log.info("Find images request with limit " + str(limit))
         img = load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
         return self.find_by_histogram(histogram, limit)
@@ -31,7 +31,7 @@ class VisualSearchEngine:
         return self.ranker.rank(histogram, self.repository, limit)
 
     def add_new_image(self, image, name):
-        VisualSearchEngine.log.info('Add new image with name ' + name + ' request')
+        self.log.info('Add new image with name ' + name + ' request')
         img = load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
         self.repository.add(name, image, histogram)
@@ -40,13 +40,13 @@ class VisualSearchEngine:
     def add_images_in_batch(self, images_dir):
         if not os.path.isdir(images_dir):
             raise IOError("The folder " + images_dir + " doesn't exist")
-        VisualSearchEngine.log.info('Adding all jpg images from directory: ' + images_dir)
+        self.log.info('Adding all jpg images from directory: ' + images_dir)
         files = sorted(glob.glob1(images_dir, VisualSearchEngine.FILE_PATTERN))
         counter = 0
-        VisualSearchEngine.log.info('There is ' + str(len(files)))
+        self.log.info('There is ' + str(len(files)))
         for fileName in files:
             try:
-                VisualSearchEngine.log.info('Processing image:' + fileName)
+                self.log.info('Processing image:' + fileName)
                 img_path = images_dir + '/' + fileName
                 grayscale_image = load_grayscale_img(img_path)
                 image = load_file_bytes(img_path)
@@ -54,14 +54,14 @@ class VisualSearchEngine:
                 name_without_dir = get_image_name_from_url(fileName)
                 self.repository.add(name_without_dir, image, histogram)
                 counter += 1
-                VisualSearchEngine.log.info('Image added to repository: ' + fileName)
+                self.log.info('Image added to repository: ' + fileName)
             except SearchEngineError as e:
-                VisualSearchEngine.log.error(e.message)
-        VisualSearchEngine.log.info('Number of images added: ' + str(counter))
+                self.log.error(e.message)
+        self.log.info('Number of images added: ' + str(counter))
         self.ranker.update(self.repository)
 
     def remove_image(self, name):
-        VisualSearchEngine.log.info('Remove image with name ' + name + ' request')
+        self.log.info('Remove image with name ' + name + ' request')
         self.repository.remove(name)
         self.ranker.update(self.repository)
         pass

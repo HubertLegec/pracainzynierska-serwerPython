@@ -5,7 +5,6 @@ from visual_search_engine.utils import load
 
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.config import load_config
-from visual_search_engine.utils.logger_utils import get_logger
 from visual_search_engine.web.web_app import start, configure
 from visual_search_engine.matcher import MatcherProvider
 
@@ -27,13 +26,12 @@ def config_logger(config):
     log_file = 'log'
     if config['web']['log_file']:
         log_file = config['web']['log_file']
-    log = get_logger('web', logging.DEBUG)
+    log = logging.getLogger('web')
+    log.setLevel(log_level)
     fh = logging.FileHandler(log_file)
     fh.setLevel(logging.DEBUG)
+    fh.setFormatter(logging.Formatter('%(asctime)s: %(name)s - %(levelname)s : %(message)s'))
     log.addHandler(fh)
-    ch = logging.StreamHandler()
-    ch.setLevel(getattr(logging, log_level))
-    log.addHandler(ch)
     return log
 
 

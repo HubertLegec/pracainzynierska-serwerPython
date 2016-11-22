@@ -16,5 +16,5 @@ class VocabularyData(Resource):
             vocabulary=vocabulary_list,
             size=size,
             rowSize=row_length)
-        self.log.info('Vocabulary request')
+        self.log.info('vocabulary returned, size: ' + str(size))
         return json
