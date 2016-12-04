@@ -13,10 +13,11 @@ def load(path):
 def save(path, data):
     """Saves data to file under given path using pickle"""
     with open(path, 'wb') as f:
-        pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(data, f, pickle.DEFAULT_PROTOCOL)
 
 
 def load_file_bytes(path):
+    """Loads binary data from file"""
     with open(path, 'rb') as f:
         content = f.read()
     f.close()
@@ -24,6 +25,7 @@ def load_file_bytes(path):
 
 
 def save_file_bytes(path, data):
+    """Saves data to file in binary mode"""
     with open(path, 'wb') as f:
         f.write(data)
     f.close()

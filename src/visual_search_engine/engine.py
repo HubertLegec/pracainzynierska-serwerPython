@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+import numpy
 
 from .bow import BOWProvider
 from .error import SearchEngineError
@@ -29,6 +30,7 @@ class VisualSearchEngine:
         return self.find_by_histogram(histogram, limit)
 
     def find_by_histogram(self, histogram, limit=5):
+        self.log.info('histogram: ' + numpy.array_str(histogram))
         return self.ranker.rank(histogram, self.repository, limit)
 
     def add_new_image(self, image, name):

@@ -3,6 +3,7 @@ import logging
 
 from visual_search_engine.utils.logger_utils import get_logger
 from visual_search_engine.utils import save, load
+from visual_search_engine.bow import BOW
 
 # ------------ logger -----------------
 log = get_logger('vocabulary_generator', logging.INFO)
