@@ -3,8 +3,11 @@ import math
 
 
 class TFIDFRanker(Ranker):
-    """TF-IDF - term frequency - inverse document frequency
-        It's method to evaluate how important is a word in a document.
+    """
+    TF-IDF - term frequency - inverse document frequency
+    It's method to evaluate how important is a word in a document.
+    In computer vision and image recognition it is used to determine how important each visual word is among others,
+    after that we can assign weights to words and use it when histograms are compared
     """
 
     def __init__(self, method='Chi-Squared-alt'):

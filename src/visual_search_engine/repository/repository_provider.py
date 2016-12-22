@@ -1,13 +1,18 @@
-from .no_such_repository_type_error import NoSuchRepositoryTypeError
-from .simple_repository import SimpleRepository
+import logging
+
+from . import NoSuchRepositoryTypeError
+from . import SimpleRepository
 
 
 class RepositoryProvider:
+    log = logging.getLogger('web.RepositoryProvider')
+
     @classmethod
     def get_repository(cls, params=None):
         params = params or cls.DEFAULT_PARAMS
-        type = cls.get_repository_type(params)
-        return cls._get_by_type(type, params)
+        repository_type = cls.get_repository_type(params)
+        cls.log.info('Create repository of type ' + repository_type + ' in directory: ' + params['directory'])
+        return cls._get_by_type(repository_type, params)
 
     @classmethod
     def get_repository_type(cls, params):

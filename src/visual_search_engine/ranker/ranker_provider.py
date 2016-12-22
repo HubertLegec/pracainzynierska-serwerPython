@@ -1,4 +1,6 @@
-from . import SimpleRanker, TFIDFRanker
+from . import SimpleRanker
+from . import TFIDFRanker
+from . import NoSuchRankerTypeError
 
 
 class RankerProvider:
@@ -15,7 +17,7 @@ class RankerProvider:
             return SimpleRanker(method)
         elif mode == 'TFIDF':
             return TFIDFRanker(method)
-        return None
+        raise NoSuchRankerTypeError(mode)
 
     DEFAULT_PARAMS = {
         'mode': 'SIMPLE',
