@@ -1,8 +1,8 @@
 import logging
 
-from visual_search_engine.bow import BOW
-from visual_search_engine.extractor import ExtractorProvider
-from visual_search_engine.matcher.matcher_provider import MatcherProvider
+from . import ExtractorProvider
+from . import MatcherProvider
+from . import BOW
 
 
 class BOWProvider:

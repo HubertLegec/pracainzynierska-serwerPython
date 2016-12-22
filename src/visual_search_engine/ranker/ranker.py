@@ -3,7 +3,7 @@ import heapq
 import logging
 from abc import ABC, abstractmethod
 from scipy.spatial import distance
-from visual_search_engine.ranker import UnsupportedComparisonMethodError
+from . import UnsupportedComparisonMethodError
 
 
 OPENCV_COMPARISON_METHODS = {

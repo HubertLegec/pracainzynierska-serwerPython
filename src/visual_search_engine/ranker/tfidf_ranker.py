@@ -1,4 +1,4 @@
-from visual_search_engine.ranker import Ranker
+from . import Ranker
 import math
 
 

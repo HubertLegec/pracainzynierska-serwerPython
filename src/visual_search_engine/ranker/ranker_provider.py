@@ -1,4 +1,4 @@
-from visual_search_engine.ranker import SimpleRanker, TFIDFRanker
+from . import SimpleRanker, TFIDFRanker
 
 
 class RankerProvider:

@@ -4,13 +4,14 @@ import logging
 
 
 class BOW:
+    log = logging.getLogger('web.BOW')
+
     def __init__(self, vocabulary, matcher, extractor):
         self.vocabulary = vocabulary
         self.extractor = extractor
         self.matcher = matcher
         self.bowDescriptorExtractor = cv2.BOWImgDescriptorExtractor(self.extractor, matcher)
         self.bowDescriptorExtractor.setVocabulary(vocabulary)
-        self.log = logging.getLogger('web.BOW')
 
     def generate_histogram(self, image):
         self.log.info('generate histogram for image')
@@ -19,15 +20,20 @@ class BOW:
         self.log.info('histogram ready')
         return histogram
 
-    @staticmethod
-    def generate_vocabulary(images, cluster_size, extractor):
+    @classmethod
+    def generate_vocabulary(cls, images, cluster_size, extractor):
+        cls.log.info('generate vocabulary for images')
         bow_trainer = cv2.BOWKMeansTrainer(cluster_size)
+        counter = 1
+        img_size = len(images)
         for img in images:
+            cls.log.info('adding descriptors from image ' + str(counter) + ' of ' + str(img_size))
             bow_trainer.add(extractor.detectAndCompute(img, None)[1])
         return bow_trainer.cluster()
 
-    @staticmethod
-    def generate_vocabulary_from_descriptors(descriptors, cluster_size):
+    @classmethod
+    def generate_vocabulary_from_descriptors(cls, descriptors, cluster_size):
+        cls.log.info('generate vocabulary for descriptors')
         bow_trainer = cv2.BOWKMeansTrainer(cluster_size)
         bow_trainer.add(np.array(descriptors))
         return bow_trainer.cluster()

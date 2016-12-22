@@ -6,7 +6,7 @@ from visual_search_engine.utils import load
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.config import load_config
 from visual_search_engine.web.web_app import start, configure
-from visual_search_engine.matcher import MatcherProvider
+from visual_search_engine.bow import MatcherProvider
 
 
 def parse_parameters(default_vocabulary, default_config):

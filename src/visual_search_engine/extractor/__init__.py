@@ -1,1 +1,0 @@
-from .extractor_provider import ExtractorProvider
