@@ -13,7 +13,7 @@ class SimpleRanker(Ranker):
     def rank(self, histogram, repository, limit):
         self.log.info('rank repository images against histogram')
         result = []
-        for file_name, hist in repository.find(histogram):
+        for file_name, hist in repository.get_all():
             match_rate = Ranker.get_match_rate(histogram, hist, self.method)
             self.log.debug('For image: ' + file_name + ' match rate: ' + str(match_rate))
             result.append((match_rate, file_name))

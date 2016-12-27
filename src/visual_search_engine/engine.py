@@ -7,7 +7,7 @@ from .bow import BOWProvider
 from .error import SearchEngineError
 from .utils import load_grayscale_image_from_buffer, load_grayscale_img
 from .ranker import RankerProvider
-from .repository import RepositoryProvider
+from .repository import Repository
 from .utils import get_image_name_from_url, load_file_bytes
 
 __version__ = 0.1
@@ -18,7 +18,7 @@ class VisualSearchEngine:
 
     def __init__(self, vocabulary, configuration={}):
         self.bow = BOWProvider.get_bow(vocabulary, configuration['extractor'], configuration['matcher'])
-        self.repository = RepositoryProvider.get_repository(configuration['repository'])
+        self.repository = Repository(configuration['repository']['directory'])
         self.ranker = RankerProvider.get_ranker(configuration['ranker'])
         self.log = logging.getLogger('vse.VSE')
 

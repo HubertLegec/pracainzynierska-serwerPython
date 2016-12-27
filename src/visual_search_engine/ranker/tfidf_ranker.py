@@ -20,7 +20,7 @@ class TFIDFRanker(Ranker):
 
     def rank(self, histogram, repository, limit):
         result = []
-        for file_name, hist in repository.find(histogram):
+        for file_name, hist in repository.get_all():
             weighted_histogram = TFIDFRanker._weight_histogram(hist, repository)
             match_rate = Ranker.get_match_rate(weighted_histogram, hist, self.method)
             result.append((match_rate, file_name))
