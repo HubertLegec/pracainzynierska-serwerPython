@@ -1,20 +1,20 @@
 import io
-import unittest
 import json
-import cv2
+import unittest
 
-from visual_search_engine import VisualSearchEngine
-from visual_search_engine.image_loader import load_grayscale_images
+import cv2
+from visual_search_engine.bow import MatcherProvider
+from tests.utils import get_image_name_from_url
+from visual_search_engine import VisualSearchEngine, web_app
 from visual_search_engine.bow import BOW
-from visual_search_engine.config import load_config
-from visual_search_engine.matcher import MatcherProvider
-from visual_search_engine.web import web_app
+from visual_search_engine.image_loader import load_grayscale_images
+from visual_search_engine.utils.config import load_config
+from visual_search_engine.web import ExtractorData
 from visual_search_engine.web import ImageRepository
+from visual_search_engine.web import MatcherData
 from visual_search_engine.web import Searcher
 from visual_search_engine.web import VocabularyData
-from visual_search_engine.web import ExtractorData
-from visual_search_engine.web import MatcherData
-from tests.utils import get_image_name_from_url
+from visual_search_engine.web import web_app
 
 
 class VseRestApiTest(unittest.TestCase):

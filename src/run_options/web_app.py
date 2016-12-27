@@ -1,12 +1,11 @@
 import argparse
 import logging
 
-from visual_search_engine.utils import load
-
 from visual_search_engine import VisualSearchEngine
-from visual_search_engine.config import load_config
-from visual_search_engine.web.web_app import start, configure
 from visual_search_engine.bow import MatcherProvider
+from visual_search_engine.utils import load
+from visual_search_engine.utils.config import load_config
+from visual_search_engine.web_app import start, configure
 
 
 def parse_parameters(default_vocabulary, default_config):
@@ -64,3 +63,7 @@ def load_app(params, autostart=False):
             configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
         )
 
+
+if __name__ == '__main__':
+    params = parse_parameters('vocabulary', 'config.ini')
+    app = load_app(params, True)

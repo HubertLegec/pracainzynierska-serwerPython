@@ -16,7 +16,8 @@ class ExtractorProvider:
     @classmethod
     def process_params(cls, params):
         """Returns params object or default params if None"""
-        cls.log.warning('extractor not configured, default will be used: SIFT')
+        if not params:
+            cls.log.warning('extractor not configured, default will be used: SIFT')
         return params or {'algorithm': 'SIFT'}
 
     @classmethod

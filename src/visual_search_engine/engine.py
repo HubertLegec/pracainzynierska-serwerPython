@@ -5,9 +5,9 @@ import numpy
 
 from .bow import BOWProvider
 from .error import SearchEngineError
-from .image_loader import load_grayscale_image_from_buffer, load_grayscale_img
+from .utils import load_grayscale_image_from_buffer, load_grayscale_img
 from .ranker import RankerProvider
-from .repository.repository_provider import RepositoryProvider
+from .repository import RepositoryProvider
 from .utils import get_image_name_from_url, load_file_bytes
 
 __version__ = 0.1

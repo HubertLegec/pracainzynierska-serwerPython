@@ -1,28 +1,32 @@
 import cv2
 import numpy
+import glob
+import logging
 from . import ImgLoadError
 from . import ImgSizeError
 
 IMAGE_MAX_SIZE = 1000
 IMAGE_MIN_SIZE = 400
+FILE_PATTERN = '*.jpg'
 
 
-def load_grayscale_images(paths):
+def load_grayscale_images(images_directory, log):
     """
     Loads collection of images from given paths
     :var: paths paths of images to load
     :return: array with loaded images
     """
-    for path in paths:
-        yield load_grayscale_img(path)
+    files = sorted(glob.glob(images_directory + FILE_PATTERN))
+    return [load_grayscale_img(file, log) for file in files]
 
 
-def load_grayscale_img(path):
+def load_grayscale_img(path, log=logging.getLogger('default')):
     """
     Load image from given path in grayscale mode and resize it to match max and min size
     :var: path image path
     :return: loaded image
     """
+    log.info('Loading image: ' + path)
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise ImgLoadError(path)

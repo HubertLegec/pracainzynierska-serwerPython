@@ -1,4 +1,4 @@
-from visual_search_engine.error import SearchEngineError
+from visual_search_engine import SearchEngineError
 
 
 class ImgLoadError(SearchEngineError):

@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api
-from . import Searcher
-from . import ImageRepository
-from . import VocabularyData
-from . import ExtractorData
-from . import MatcherData
-from . import HistogramSearcher
+from .web import Searcher
+from .web import ImageRepository
+from .web import VocabularyData
+from .web import ExtractorData
+from .web import MatcherData
+from .web import HistogramSearcher
 
 
 app = Flask('Visual Search Engine')

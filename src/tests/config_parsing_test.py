@@ -1,7 +1,7 @@
 import configparser
 import unittest
 
-from visual_search_engine.config import load_config, str_to_number
+from visual_search_engine.utils.config import load_config, str_to_number
 
 
 class ConfigParserTest(unittest.TestCase):
