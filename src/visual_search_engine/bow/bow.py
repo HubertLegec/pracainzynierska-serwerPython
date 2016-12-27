@@ -3,8 +3,10 @@ import logging
 
 
 class BOW:
-    DEFAULT_MAX_DESCRIPTORS = 3000
-    DEFAULT_CLUSTER_SIZE = 300
+    DEFAULT_CONFIG = {
+        'cluster_count': 300,
+        'max_descriptors': 3000
+    }
     log = logging.getLogger('web.BOW')
 
     def __init__(self, vocabulary, matcher, extractor):
@@ -43,8 +45,3 @@ class BOW:
                 break
             counter += 1
         return bow_trainer.cluster()
-
-    DEFAULT_CONFIG = {
-        'cluster_count': DEFAULT_CLUSTER_SIZE,
-        'max_descriptors': DEFAULT_MAX_DESCRIPTORS
-    }

@@ -25,4 +25,6 @@ class ExtractorProvider:
         """Returns algorithm from config and removes algorithm entry from params object"""
         algorithm = params['algorithm']
         params.pop('algorithm')
+        if algorithm != 'SIFT':
+            params.pop('nfeatures', None)
         return algorithm
