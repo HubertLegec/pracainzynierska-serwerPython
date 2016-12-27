@@ -25,7 +25,7 @@ SCIPY_COMPARISON_METHODS = {
 class Ranker(ABC):
     def __init__(self, method='SIMPLE'):
         self.method = method
-        self.log = logging.getLogger('web.Ranker')
+        self.log = logging.getLogger('vse.Ranker')
 
     @abstractmethod
     def rank(self, histogram, repository, limit):

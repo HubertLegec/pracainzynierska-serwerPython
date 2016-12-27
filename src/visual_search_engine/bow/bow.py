@@ -7,7 +7,7 @@ class BOW:
         'cluster_count': 300,
         'max_descriptors': 3000
     }
-    log = logging.getLogger('web.BOW')
+    log = logging.getLogger('vse.BOW')
 
     def __init__(self, vocabulary, matcher, extractor):
         self.vocabulary = vocabulary

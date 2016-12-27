@@ -7,7 +7,7 @@ from . import BaseSearcher
 class HistogramSearcher(BaseSearcher):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.log = logging.getLogger('web.HistogramSearcher')
+        self.log = logging.getLogger('vse.HistogramSearcher')
 
     def post(self, limit=4):
         """Returns list of urls to images that matches payload, size of list is limited by <limit>"""

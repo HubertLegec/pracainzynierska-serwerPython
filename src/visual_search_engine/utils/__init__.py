@@ -1,4 +1,4 @@
-from .logger_utils import *
+from .log_factory import LogFactory
 from .error import *
 from .image_loader import *
 from .file_utils import *

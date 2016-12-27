@@ -7,7 +7,7 @@ import numpy
 class VocabularyData(Resource):
     def __init__(self, **kwargs):
         self.vocabulary = kwargs['vocabulary']
-        self.log = logging.getLogger('web.VocabularyData')
+        self.log = logging.getLogger('vse.VocabularyData')
 
     def get(self):
         self.log.info('Vocabulary: ' + numpy.array_str(self.vocabulary))

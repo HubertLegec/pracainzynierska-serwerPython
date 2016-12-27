@@ -3,7 +3,7 @@ import logging
 
 
 class ExtractorProvider:
-    log = logging.getLogger('web.ExtractorProvider')
+    log = logging.getLogger('vse.ExtractorProvider')
 
     @classmethod
     def get_extractor(cls, params=None):

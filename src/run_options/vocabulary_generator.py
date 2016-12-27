@@ -1,18 +1,13 @@
 import argparse
-import logging
 import glob
 
-from visual_search_engine.utils import get_logger
+from visual_search_engine.utils import LogFactory
 from visual_search_engine.utils import save
 from visual_search_engine.utils import load_config
 from visual_search_engine.utils import normalize_dir_path
 from visual_search_engine.utils import load_grayscale_images
 from visual_search_engine.bow import ExtractorProvider
 from visual_search_engine.bow import BOW
-
-# ------------ logger -----------------
-log = get_logger('vocabulary_generator', logging.INFO)
-# -------------------------------------
 
 FILE_PATTERN = '*.jpg'
 
@@ -31,6 +26,7 @@ def parse_parameters():
 if __name__ == "__main__":
     params = parse_parameters()
     config = load_config(params.config)
+    log = LogFactory.get_logger(config)
     extractorConfig = config['extractor']
     extractor = ExtractorProvider.get_extractor(extractorConfig)
     images_directory = normalize_dir_path(params.images)

@@ -9,7 +9,7 @@ from visual_search_engine.utils import ImgLoadError, ImgSizeError
 class ImageRepository(Resource):
 
     def __init__(self, **kwargs):
-        self.log = logging.getLogger('web.ImageRepository')
+        self.log = logging.getLogger('vse.ImageRepository')
         self.search_engine = kwargs['search_engine']
 
     def post(self, name):

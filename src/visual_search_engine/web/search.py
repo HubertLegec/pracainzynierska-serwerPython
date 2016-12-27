@@ -6,7 +6,7 @@ from . import BaseSearcher
 class Searcher(BaseSearcher):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.log = logging.getLogger('web.Searcher')
+        self.log = logging.getLogger('vse.Searcher')
 
     def post(self, limit=4):
         """Returns list of urls to images that matches payload, size of list is limited by <limit>"""

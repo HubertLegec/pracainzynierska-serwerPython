@@ -20,7 +20,7 @@ class VisualSearchEngine:
         self.bow = BOWProvider.get_bow(vocabulary, configuration['extractor'], configuration['matcher'])
         self.repository = RepositoryProvider.get_repository(configuration['repository'])
         self.ranker = RankerProvider.get_ranker(configuration['ranker'])
-        self.log = logging.getLogger('web.VSE')
+        self.log = logging.getLogger('vse.VSE')
 
     def find(self, image, limit=5):
         self.log.info("Find images request with limit " + str(limit))

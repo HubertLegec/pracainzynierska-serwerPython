@@ -5,7 +5,7 @@ from . import SimpleRepository
 
 
 class RepositoryProvider:
-    log = logging.getLogger('web.RepositoryProvider')
+    log = logging.getLogger('vse.RepositoryProvider')
 
     @classmethod
     def get_repository(cls, params=None):

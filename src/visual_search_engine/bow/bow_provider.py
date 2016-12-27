@@ -6,7 +6,7 @@ from . import BOW
 
 
 class BOWProvider:
-    log = logging.getLogger('web.BOWProvider')
+    log = logging.getLogger('vse.BOWProvider')
 
     @classmethod
     def get_bow(cls, vocabulary, extractor_params=None, matcher_params=None):

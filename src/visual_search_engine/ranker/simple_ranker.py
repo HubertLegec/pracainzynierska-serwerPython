@@ -5,7 +5,7 @@ from . import Ranker
 class SimpleRanker(Ranker):
     def __init__(self, method='CHI_SQUARED_ALT'):
         Ranker.__init__(self, method)
-        self.log = logging.getLogger('web.SimpleRanker')
+        self.log = logging.getLogger('vse.SimpleRanker')
 
     def update(self, repository):
         pass
