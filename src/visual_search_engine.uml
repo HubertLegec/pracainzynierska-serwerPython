@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/hubert/PyCharmProjects/pracainzynierska-serwerPython/src/visual_search_engine</OriginalElement>
+  <nodes>
+    <node x="3506.9485995297714" y="1969.2888933620002">visual_search_engine.engine.VisualSearchEngine</node>
+    <node x="3442.0699234665" y="1748.0081573691334">visual_search_engine.ranker.ranker_provider.RankerProvider</node>
+    <node x="4036.4927423764675" y="1559.7199076240408">visual_search_engine.utils.config.ConfigLoader</node>
+    <node x="3895.04926808269" y="2607.51105453249">visual_search_engine.web.vocabulary_data.VocabularyData</node>
+    <node x="3586.4281209818" y="1573.642924667639">visual_search_engine.bow.matcher_provider.MatcherProvider</node>
+    <node x="3758.031309943823" y="2469.971148144704">visual_search_engine.web.extractor_data.ExtractorData</node>
+    <node x="3503.4180980317756" y="1676.7952086933565">visual_search_engine.utils.image_loader.ImageLoader</node>
+    <node x="3662.20657214838" y="2544.5798882731533">flask_restful.Resource</node>
+    <node x="3425.855054895581" y="1862.573180325337">visual_search_engine.repository.repository.Repository</node>
+    <node x="3860.0350018166873" y="2037.9964795978385">visual_search_engine.bow.bow.BOW</node>
+    <node x="3853.423997492854" y="1517.662075424306">visual_search_engine.utils.log_factory.LogFactory</node>
+    <node x="4344.365353888854" y="1672.3186996323402">visual_search_engine.ranker.simple_ranker.SimpleRanker</node>
+    <node x="4162.93631917917" y="1613.5080581047719">visual_search_engine.bow.extractor_provider.ExtractorProvider</node>
+    <node x="3424.2650061669415" y="2646.3124520662836">visual_search_engine.web.base_searcher.BaseSearcher</node>
+    <node x="4042.0819114560563" y="2262.5972251171356">visual_search_engine.error.SearchEngineError</node>
+    <node x="4142.654378875428" y="2434.5215264810827">visual_search_engine.ranker.error.UnsupportedComparisonMethodError</node>
+    <node x="3429.4493468503906" y="1795.3418969036704">visual_search_engine.bow.bow_provider.BOWProvider</node>
+    <node x="4184.804085250484" y="2044.3009516430016">Exception</node>
+    <node x="3717.390060107557" y="2154.698292405591">flask.views.View</node>
+    <node x="3670.302322618501" y="2275.80114580752">flask.views.MethodView</node>
+    <node x="3814.813413231687" y="2710.716974001271">visual_search_engine.web.repository.ImageRepository</node>
+    <node x="3889.9261440360565" y="2195.382557778347">visual_search_engine.utils.error.ImgSizeError</node>
+    <node x="4248.46749666653" y="1774.946197184011">abc.ABC</node>
+    <node x="4014.8655886415618" y="1851.001057974341">visual_search_engine.utils.file_utils.FileUtils</node>
+    <node x="3366.4985547946044" y="2441.336019046427">visual_search_engine.web.matcher_data.MatcherData</node>
+    <node x="3826.183835700064" y="2372.1023733524344">visual_search_engine.repository.error.DuplicatedRepositoryEntryError</node>
+    <node x="4409.979922898294" y="2280.960349712003">visual_search_engine.utils.error.ImgLoadError</node>
+    <node x="3997.080882097048" y="1970.4948170435198">BaseException</node>
+    <node x="4335.737062677834" y="2366.0208864091865">visual_search_engine.ranker.error.NoSuchRankerTypeError</node>
+    <node x="3357.0518706762405" y="2711.4495994314325">visual_search_engine.web.histogram_search.HistogramSearcher</node>
+    <node x="4309.01973560516" y="1938.5905342375934">abc.ABCMeta</node>
+    <node x="4272.073533304566" y="2181.7780480365595">visual_search_engine.repository.error.NoSuchRepositoryEntryError</node>
+    <node x="3349.2969546518734" y="2574.662986461525">visual_search_engine.web.search.Searcher</node>
+    <node x="4204.950771892469" y="1714.2147230409712">_collections_abc.Hashable</node>
+    <node x="3926.91544267868" y="1773.4478549045364">object</node>
+    <node x="4380.227793512094" y="1770.9648326796903">visual_search_engine.ranker.ranker.Ranker</node>
+    <node x="4388.358773510786" y="1834.6321381495568">visual_search_engine.ranker.tfidf_ranker.TFIDFRanker</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="flask.views.MethodView" target="flask.views.View">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.histogram_search.HistogramSearcher" target="visual_search_engine.web.base_searcher.BaseSearcher">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="abc.ABC" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="abc.ABC" target="abc.ABCMeta">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="Exception" target="BaseException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.matcher_data.MatcherData" target="flask_restful.Resource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.engine.VisualSearchEngine" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.repository.error.NoSuchRepositoryEntryError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.repository.ImageRepository" target="flask_restful.Resource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.extractor_data.ExtractorData" target="flask_restful.Resource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.ranker.Ranker" target="abc.ABC">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="flask_restful.Resource" target="flask.views.MethodView">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.simple_ranker.SimpleRanker" target="visual_search_engine.ranker.ranker.Ranker">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.file_utils.FileUtils" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.bow.bow.BOW" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.repository.error.DuplicatedRepositoryEntryError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.tfidf_ranker.TFIDFRanker" target="visual_search_engine.ranker.ranker.Ranker">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.bow.bow_provider.BOWProvider" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.error.SearchEngineError" target="Exception">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.error.UnsupportedComparisonMethodError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="object" target="_collections_abc.Hashable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.log_factory.LogFactory" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.config.ConfigLoader" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="flask.views.View" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.bow.matcher_provider.MatcherProvider" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.search.Searcher" target="visual_search_engine.web.base_searcher.BaseSearcher">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.bow.extractor_provider.ExtractorProvider" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.image_loader.ImageLoader" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.vocabulary_data.VocabularyData" target="flask_restful.Resource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.error.NoSuchRankerTypeError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.error.ImgSizeError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.utils.error.ImgLoadError" target="visual_search_engine.error.SearchEngineError">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.ranker.ranker_provider.RankerProvider" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="BaseException" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.web.base_searcher.BaseSearcher" target="flask_restful.Resource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="visual_search_engine.repository.repository.Repository" target="object">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5607377383175276" x="4084.8333017164914" y="2148.05389832095" />
+  <SelectedNodes />
+  <Categories />
+</Diagram>
+

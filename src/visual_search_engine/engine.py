@@ -9,7 +9,7 @@ from .ranker import RankerProvider
 from .repository import Repository
 from .utils import FileUtils
 
-__version__ = 0.1
+__version__ = 1.0
 
 
 class VisualSearchEngine:
@@ -64,4 +64,3 @@ class VisualSearchEngine:
         self.log.info('Remove image with name ' + name + ' request')
         self.repository.remove(name)
         self.ranker.update(self.repository)
-        pass
