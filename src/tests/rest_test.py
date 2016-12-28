@@ -5,16 +5,16 @@ import unittest
 import cv2
 from visual_search_engine.bow import MatcherProvider
 from tests.utils import get_image_name_from_url
-from visual_search_engine import VisualSearchEngine, web_app
+from visual_search_engine import VisualSearchEngine
 from visual_search_engine.bow import BOW
-from visual_search_engine.image_loader import load_grayscale_images
-from visual_search_engine.utils.config import load_config
+from visual_search_engine.utils import ImageLoader
+from visual_search_engine.utils import ConfigLoader
 from visual_search_engine.web import ExtractorData
 from visual_search_engine.web import ImageRepository
 from visual_search_engine.web import MatcherData
 from visual_search_engine.web import Searcher
 from visual_search_engine.web import VocabularyData
-from visual_search_engine.web import web_app
+from visual_search_engine import web_app
 
 
 class VseRestApiTest(unittest.TestCase):
@@ -29,9 +29,9 @@ class VseRestApiTest(unittest.TestCase):
         with open(cls.TEST_IMAGE_2, 'rb') as file2:
             cls.test_img_2 = file2.read()
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
+        images = ImageLoader.load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
-        config = load_config('test_config.ini')
+        config = ConfigLoader.load_config('test_config.ini')
         matcher_config = config.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
         search_engine = VisualSearchEngine(cls.vocabulary, config)
         cls.app = web_app.app

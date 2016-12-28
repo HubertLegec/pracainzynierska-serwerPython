@@ -2,8 +2,8 @@ import argparse
 
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.bow import MatcherProvider
-from visual_search_engine.utils import load
-from visual_search_engine.utils import load_config
+from visual_search_engine.utils import FileUtils
+from visual_search_engine.utils import ConfigLoader
 from visual_search_engine.utils import LogFactory
 from visual_search_engine.web_app import start, configure
 
@@ -25,8 +25,8 @@ def load_files_to_repository(config, search_engine):
 
 
 def load_app(params, autostart=False):
-    configuration = load_config(params.config)
-    vocabulary = load(params.vocabulary)
+    configuration = ConfigLoader.load_config(params.config)
+    vocabulary = FileUtils.load(params.vocabulary)
     log = LogFactory.get_logger(configuration)
     search_engine = VisualSearchEngine(vocabulary, configuration)
     load_files_to_repository(configuration, search_engine)

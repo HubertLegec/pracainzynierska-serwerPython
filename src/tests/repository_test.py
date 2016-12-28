@@ -4,12 +4,12 @@ import tempfile
 import unittest
 from os import path
 
-from visual_search_engine.repository.duplicated_repository_entry_error import DuplicatedRepositoryEntryError
-from visual_search_engine.repository.simple_repository import SimpleRepository
-from visual_search_engine.utils import normalize_dir_path
+from visual_search_engine.repository import DuplicatedRepositoryEntryError
+from visual_search_engine.repository import Repository
+from visual_search_engine.utils import FileUtils
 
 
-class SimpleRepositoryTest(unittest.TestCase):
+class RepositoryTest(unittest.TestCase):
     TEST_IMAGE_1 = 'test_file_1.jpg'
     TEST_IMAGE_2 = 'test_file_2.jpg'
 
@@ -30,13 +30,13 @@ class SimpleRepositoryTest(unittest.TestCase):
 
     def test_create_empty_repository(self):
         repo_dir = path.join(self.temp_root, 'index')
-        normalized_repo_dir = normalize_dir_path(repo_dir)
-        repository = SimpleRepository(repo_dir)
+        normalized_repo_dir = FileUtils.normalize_dir_path(repo_dir)
+        repository = Repository(repo_dir)
         self.assertEqual(normalized_repo_dir, repository.repository_dir)
         self.assertTrue(not os.listdir(repository.repository_dir))
 
     def test_after_add_repository_has_one_element(self):
-        repository = SimpleRepository(self.temp_root)
+        repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         elements = repository.elements.items()
         self.assertEqual(1, len(elements))
@@ -44,7 +44,7 @@ class SimpleRepositoryTest(unittest.TestCase):
         self.assertEqual([self.TEST_IMAGE_1], os.listdir(repository.repository_dir))
 
     def test_after_remove_repository_with_one_element_is_empty(self):
-        repository = SimpleRepository(self.temp_root)
+        repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         elements = repository.elements.items()
         self.assertEqual(1, len(elements))
@@ -54,14 +54,14 @@ class SimpleRepositoryTest(unittest.TestCase):
         self.assertTrue(not os.listdir(repository.repository_dir))
 
     def test_add_the_same_element_should_fail(self):
-        repository = SimpleRepository(self.temp_root)
+        repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         elements = repository.elements.items()
         self.assertEqual(1, len(elements))
         self.assertRaises(DuplicatedRepositoryEntryError, repository.add, self.TEST_IMAGE_1, self.test_img_1, {})
 
     def test_find_should_return_all_elements(self):
-        repository = SimpleRepository(self.temp_root)
+        repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         repository.add(self.TEST_IMAGE_2, self.test_img_1, {})
         elements = repository.elements.items()

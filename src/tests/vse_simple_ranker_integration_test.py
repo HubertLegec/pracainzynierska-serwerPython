@@ -6,8 +6,8 @@ import cv2
 from tests.utils import get_image_name_from_url
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.bow import BOW
-from visual_search_engine.utils import load_grayscale_images
-from visual_search_engine.utils import load_config
+from visual_search_engine.utils import ImageLoader
+from visual_search_engine.utils import ConfigLoader
 
 
 class SimpleRankerIntegrationTest(unittest.TestCase):
@@ -22,12 +22,12 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         with open(cls.TEST_IMAGE_2, 'rb') as file2:
             cls.test_img_2 = file2.read()
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
+        images = ImageLoader.load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
         cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
 
     @classmethod
     def setUp(cls):
-        cls.config = load_config('test_config.ini')
+        cls.config = ConfigLoader.load_config('test_config.ini')
         cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)
         cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
 

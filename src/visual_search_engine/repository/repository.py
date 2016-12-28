@@ -1,20 +1,18 @@
 import atexit
 import os
 
-from visual_search_engine.utils import save_file_bytes
-from visual_search_engine.utils import remove_dir
-from visual_search_engine.utils import normalize_dir_path
+from visual_search_engine.utils import FileUtils
 from . import DuplicatedRepositoryEntryError
 from . import NoSuchRepositoryEntryError
 
 
 class Repository:
     def __init__(self, repository_path='index'):
-        self.repository_dir = normalize_dir_path(repository_path)
-        remove_dir(repository_path)
+        self.repository_dir = FileUtils.normalize_dir_path(repository_path)
+        FileUtils.remove_dir(repository_path)
         os.makedirs(repository_path)
         self.elements = {}
-        atexit.register(remove_dir, repository_path)
+        atexit.register(FileUtils.remove_dir, repository_path)
 
     def add(self, name, image, histogram):
         """
@@ -26,7 +24,7 @@ class Repository:
         """
         if name in self.elements.keys():
             raise DuplicatedRepositoryEntryError(name)
-        save_file_bytes(self.repository_dir + name, image)
+        FileUtils.save_file_bytes(self.repository_dir + name, image)
         self.elements[name] = histogram
 
     def remove(self, name):

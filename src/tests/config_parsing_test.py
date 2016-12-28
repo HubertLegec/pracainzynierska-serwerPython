@@ -1,7 +1,7 @@
 import configparser
 import unittest
 
-from visual_search_engine.utils.config import load_config, str_to_number
+from visual_search_engine.utils import ConfigLoader
 
 
 class ConfigParserTest(unittest.TestCase):
@@ -10,7 +10,7 @@ class ConfigParserTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         config_file = 'test_config.ini'
-        cls.config = load_config(config_file)
+        cls.config = ConfigLoader.load_config(config_file)
 
     def test_file_parsing(self):
         correct_config = {
@@ -34,8 +34,8 @@ class ConfigParserTest(unittest.TestCase):
         config.add_section('matcher')
         config.set('matcher', 'algorithm', 'BFMatcher')
         config.set('matcher', 'norm_type', '4')
-        self.assertEqual(4, str_to_number('matcher', 'norm_type', config))
-        self.assertEqual('BFMatcher', str_to_number('matcher', 'algorithm', config))
+        self.assertEqual(4, ConfigLoader._str_to_number('matcher', 'norm_type', config))
+        self.assertEqual('BFMatcher', ConfigLoader._str_to_number('matcher', 'algorithm', config))
 
 
 if __name__ == '__main__':

@@ -2,10 +2,9 @@ import argparse
 import glob
 
 from visual_search_engine.utils import LogFactory
-from visual_search_engine.utils import save
-from visual_search_engine.utils import load_config
-from visual_search_engine.utils import normalize_dir_path
-from visual_search_engine.utils import load_grayscale_images
+from visual_search_engine.utils import ConfigLoader
+from visual_search_engine.utils import FileUtils
+from visual_search_engine.utils import ImageLoader
 from visual_search_engine.bow import ExtractorProvider
 from visual_search_engine.bow import BOW
 
@@ -25,17 +24,17 @@ def parse_parameters():
 
 if __name__ == "__main__":
     params = parse_parameters()
-    config = load_config(params.config)
+    config = ConfigLoader.load_config(params.config)
     log = LogFactory.get_logger(config)
     extractorConfig = config['extractor']
     extractor = ExtractorProvider.get_extractor(extractorConfig)
-    images_directory = normalize_dir_path(params.images)
+    images_directory = FileUtils.normalize_dir_path(params.images)
     log.info('Loading images...')
     files = sorted(glob.glob(images_directory + FILE_PATTERN))
-    images = load_grayscale_images(images_directory, log)
+    images = ImageLoader.load_grayscale_images(images_directory)
     log.info('Generating vocabulary...')
     vocabulary_config = config['vocabulary']
     vocabulary = BOW.generate_vocabulary(images, extractor, vocabulary_config, log)
     log.info("Saving vocabulary of size " + str(len(vocabulary)) + " to '" + params.save + "'")
-    save(params.save, vocabulary)
+    FileUtils.save(params.save, vocabulary)
     log.info('Vocabulary saved.')

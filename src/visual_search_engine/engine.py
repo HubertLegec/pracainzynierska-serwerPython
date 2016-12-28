@@ -5,10 +5,10 @@ import numpy
 
 from .bow import BOWProvider
 from .error import SearchEngineError
-from .utils import load_grayscale_image_from_buffer, load_grayscale_img
+from .utils import ImageLoader
 from .ranker import RankerProvider
 from .repository import Repository
-from .utils import get_image_name_from_url, load_file_bytes
+from .utils import FileUtils
 
 __version__ = 0.1
 
@@ -24,7 +24,7 @@ class VisualSearchEngine:
 
     def find(self, image, limit=5):
         self.log.info("Find images request with limit " + str(limit))
-        img = load_grayscale_image_from_buffer(image)
+        img = ImageLoader.load_grayscale_image_from_buffer(image)
         self.log.info('Image loaded from buffer')
         histogram = self.bow.generate_histogram(img)
         return self.find_by_histogram(histogram, limit)
@@ -35,7 +35,7 @@ class VisualSearchEngine:
 
     def add_new_image(self, image, name):
         self.log.info('Add new image with name ' + name + ' request')
-        img = load_grayscale_image_from_buffer(image)
+        img = ImageLoader.load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
         self.repository.add(name, image, histogram)
         self.ranker.update(self.repository)
@@ -51,10 +51,10 @@ class VisualSearchEngine:
             try:
                 self.log.info('Processing image:' + fileName)
                 img_path = images_dir + '/' + fileName
-                grayscale_image = load_grayscale_img(img_path)
-                image = load_file_bytes(img_path)
+                grayscale_image = ImageLoader.load_grayscale_img(img_path)
+                image = FileUtils.load_file_bytes(img_path)
                 histogram = self.bow.generate_histogram(grayscale_image)
-                name_without_dir = get_image_name_from_url(fileName)
+                name_without_dir = FileUtils.get_image_name_from_url(fileName)
                 self.repository.add(name_without_dir, image, histogram)
                 counter += 1
                 self.log.info('Image added to repository: ' + fileName)
