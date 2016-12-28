@@ -6,23 +6,22 @@ from scipy.spatial import distance
 from . import UnsupportedComparisonMethodError
 
 
-OPENCV_COMPARISON_METHODS = {
-    'CORRELATION': cv2.HISTCMP_CORREL,
-    'CHI_SQUARED': cv2.HISTCMP_CHISQR,
-    'INTERSECTION': cv2.HISTCMP_INTERSECT,
-    'HELLINGER': cv2.HISTCMP_HELLINGER,
-    'BHATTACHARAYYA': cv2.HISTCMP_BHATTACHARYYA,
-    'CHI_SQUARED_ALT': cv2.HISTCMP_CHISQR_ALT,
-    'KULLBACK-LEIBLER': cv2.HISTCMP_KL_DIV
-}
-
-SCIPY_COMPARISON_METHODS = {
-    'EUCLIDEAN': distance.euclidean,
-    'CHEBYSEV': distance.chebyshev
-}
-
-
 class Ranker(ABC):
+    OPENCV_COMPARISON_METHODS = {
+        'CORRELATION': cv2.HISTCMP_CORREL,
+        'CHI_SQUARED': cv2.HISTCMP_CHISQR,
+        'INTERSECTION': cv2.HISTCMP_INTERSECT,
+        'HELLINGER': cv2.HISTCMP_HELLINGER,
+        'BHATTACHARAYYA': cv2.HISTCMP_BHATTACHARYYA,
+        'CHI_SQUARED_ALT': cv2.HISTCMP_CHISQR_ALT,
+        'KULLBACK-LEIBLER': cv2.HISTCMP_KL_DIV
+    }
+
+    SCIPY_COMPARISON_METHODS = {
+        'EUCLIDEAN': distance.euclidean,
+        'CHEBYSEV': distance.chebyshev
+    }
+
     def __init__(self, method='SIMPLE'):
         self.method = method
         self.log = logging.getLogger('vse.Ranker')
@@ -49,12 +48,12 @@ class Ranker(ABC):
             self.log.info('Get limited result: ' + str(limit) + ' smallest')
             return heapq.nsmallest(limit, result, key=lambda pair: pair[0])
 
-    @staticmethod
-    def get_match_rate(reference_histogram, found_histogram, method):
-        if method in OPENCV_COMPARISON_METHODS:
-            return cv2.compareHist(reference_histogram, found_histogram, OPENCV_COMPARISON_METHODS[method])
-        elif method in SCIPY_COMPARISON_METHODS:
-            return SCIPY_COMPARISON_METHODS[method](reference_histogram, found_histogram)
+    @classmethod
+    def get_match_rate(cls, reference_histogram, found_histogram, method):
+        if method in cls.OPENCV_COMPARISON_METHODS:
+            return cv2.compareHist(reference_histogram, found_histogram, cls.OPENCV_COMPARISON_METHODS[method])
+        elif method in cls.SCIPY_COMPARISON_METHODS:
+            return cls.SCIPY_COMPARISON_METHODS[method](reference_histogram, found_histogram)
         else:
             raise UnsupportedComparisonMethodError(method)
 

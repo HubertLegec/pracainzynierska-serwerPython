@@ -24,14 +24,14 @@ def load_files_to_repository(config, search_engine):
         search_engine.add_images_in_batch(files_dir)
 
 
-def load_app(params, autostart=False):
+def load_app(params, auto_start=False):
     configuration = ConfigLoader.load_config(params.config)
     vocabulary = FileUtils.load(params.vocabulary)
     log = LogFactory.get_logger(configuration)
     search_engine = VisualSearchEngine(vocabulary, configuration)
     load_files_to_repository(configuration, search_engine)
     log.info('Web server start...')
-    if autostart:
+    if auto_start:
         start(
             search_engine,
             vocabulary,
