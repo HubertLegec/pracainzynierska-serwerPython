@@ -4,7 +4,7 @@ import logging
 class LogFactory:
     ROOT_LOGGER_NAME = 'vse'
     FORMATTER = logging.Formatter('%(asctime)s: %(name)s - %(levelname)s : %(message)s')
-    DEFAULT_LOG_LEVEL = 'INFO'
+    DEFAULT_LOGge_LEVEL = 'INFO'
     DEFAULT_LOG_FILE = 'logs'
 
     @classmethod

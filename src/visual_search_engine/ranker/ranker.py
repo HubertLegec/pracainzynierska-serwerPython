@@ -28,19 +28,19 @@ class Ranker(ABC):
 
     @abstractmethod
     def rank(self, histogram, repository, limit):
-        """Ranks images in index based on similarity to given histogram.
+        """Ranks images in repository based on similarity to given histogram.
             :return list of tuples: (ratio, filename)
         """
         pass
 
     @abstractmethod
     def update(self, repository):
-        """Should be invoked after image index change - ranker parameters update
+        """Should be invoked after image repository change - ranker parameters update
             :param repository
         """
         pass
 
-    def get_limited_result(self, result, limit):
+    def _get_limited_result(self, result, limit):
         if self.method == 'CORRELATION' or self.method == 'INTERSECTION':
             self.log.info('Get limited result: ' + str(limit) + ' largest')
             return heapq.nlargest(limit, result, key=lambda pair: pair[0])
@@ -49,7 +49,7 @@ class Ranker(ABC):
             return heapq.nsmallest(limit, result, key=lambda pair: pair[0])
 
     @classmethod
-    def get_match_rate(cls, reference_histogram, found_histogram, method):
+    def _get_match_rate(cls, reference_histogram, found_histogram, method):
         if method in cls.OPENCV_COMPARISON_METHODS:
             return cv2.compareHist(reference_histogram, found_histogram, cls.OPENCV_COMPARISON_METHODS[method])
         elif method in cls.SCIPY_COMPARISON_METHODS:

@@ -1,6 +1,6 @@
 import logging
 import numpy
-from flask import request, json
+from flask import request, json, jsonify
 from . import BaseSearcher
 
 
@@ -12,11 +12,11 @@ class HistogramSearcher(BaseSearcher):
     def post(self, limit=4):
         """Returns list of urls to images that matches payload, size of list is limited by <limit>"""
         self.log.info('histogram search with limit' + str(limit))
-        histogram = HistogramSearcher.json_to_numpy_array(request.data)
+        histogram = self.json_to_numpy_array(request.data)
         img_paths = self.search_engine.find_by_histogram(histogram, limit)
         self.log.info('search result size: ' + str(len(img_paths)))
         img_descriptions = self.create_images_descriptions(img_paths)
-        return self.create_json_response(img_descriptions)
+        return jsonify(images=img_descriptions)
 
     @classmethod
     def json_to_numpy_array(cls, json_request):

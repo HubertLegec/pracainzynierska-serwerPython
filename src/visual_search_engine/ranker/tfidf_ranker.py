@@ -15,29 +15,33 @@ class TFIDFRanker(Ranker):
         Ranker.__init__(self, method)
 
     def update(self, repository):
-        self.vector = [TFIDFRanker._normalize_vector(TFIDFRanker.calculate_histogram_tfidf(repository, histogram)) for histogram in
-                       repository.elements.values()]
+        repository_values = repository.elements.values()
+        self.vector = [self._get_normalized_tfidf_hist(repository, hist) for hist in repository_values]
 
     def rank(self, histogram, repository, limit):
         result = []
         for file_name, hist in repository.get_all():
-            weighted_histogram = TFIDFRanker._weight_histogram(hist, repository)
-            match_rate = Ranker.get_match_rate(weighted_histogram, hist, self.method)
+            weighted_histogram = self._weight_histogram(hist, repository)
+            match_rate = self._get_match_rate(weighted_histogram, hist, self.method)
             result.append((match_rate, file_name))
-        limited_result = self.get_limited_result(result, limit)
+        limited_result = self._get_limited_result(result, limit)
         return limited_result
 
-    @staticmethod
-    def _weight_histogram(histogram, repository):
-        weighted_histogram = TFIDFRanker.calculate_histogram_tfidf(repository, histogram)
-        return TFIDFRanker._normalize_vector(weighted_histogram)
+    @classmethod
+    def _get_normalized_tfidf_hist(cls, repository, histogram):
+        return cls._normalize_vector(cls._calculate_histogram_tfidf(repository, histogram))
 
-    @staticmethod
-    def calculate_tf(histogram, idx):
+    @classmethod
+    def _weight_histogram(cls, histogram, repository):
+        weighted_histogram = cls._calculate_histogram_tfidf(repository, histogram)
+        return cls._normalize_vector(weighted_histogram)
+
+    @classmethod
+    def _calculate_tf(cls, histogram, idx):
         return histogram[idx] / sum(histogram)
 
-    @staticmethod
-    def calculate_idf(repository, idx):
+    @classmethod
+    def _calculate_idf(cls, repository, idx):
         occurrence_counter = 0
         for histogram in repository.elements.values():
             if histogram[idx] != 0:
@@ -46,16 +50,16 @@ class TFIDFRanker(Ranker):
             return 0
         return math.log10(len(repository.elements) / occurrence_counter)
 
-    @staticmethod
-    def calculate_tfidf(repository, histogram, idx):
-        return TFIDFRanker.calculate_tf(histogram, idx) * TFIDFRanker.calculate_idf(repository, idx)
+    @classmethod
+    def _calculate_tfidf(cls, repository, histogram, idx):
+        return cls._calculate_tf(histogram, idx) * cls._calculate_idf(repository, idx)
 
-    @staticmethod
-    def calculate_histogram_tfidf(repository, histogram):
-        return [TFIDFRanker.calculate_tfidf(repository, histogram, i) for i, val in enumerate(histogram)]
+    @classmethod
+    def _calculate_histogram_tfidf(cls, repository, histogram):
+        return [cls._calculate_tfidf(repository, histogram, i) for i, val in enumerate(histogram)]
 
-    @staticmethod
-    def _normalize_vector(vector):
+    @classmethod
+    def _normalize_vector(cls, vector):
         vector_sum = sum(vector)
         if vector_sum == 0:
             return vector

@@ -85,5 +85,9 @@ class VseRestApiTest(unittest.TestCase):
         self.assertEqual(names_without_urls, [FileUtils.get_filename_from_path(img) for img in image_list])
 
     def upload_image(self, name, image):
-        return self.client.post('/upload/' + FileUtils.get_filename_from_path(name), data=image, headers={'Content-Type': 'application/octet-stream'})
+        return self.client.post(
+            '/upload/' + FileUtils.get_filename_from_path(name),
+            data=image,
+            headers={'Content-Type': 'application/octet-stream'}
+        )
 

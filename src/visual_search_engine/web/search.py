@@ -1,5 +1,5 @@
 import logging
-from flask import request
+from flask import request, jsonify
 from . import BaseSearcher
 
 
@@ -15,7 +15,4 @@ class Searcher(BaseSearcher):
         result = self.search_engine.find(query_file, limit)
         self.log.info('search result size: ' + str(len(result)))
         img_descriptions = self.create_images_descriptions(result)
-        return self.create_json_response(img_descriptions)
-
-
-
+        return jsonify(images=img_descriptions)
