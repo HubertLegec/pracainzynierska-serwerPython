@@ -22,10 +22,11 @@ class Repository:
         :var: histogram calculated image histogram
         :raise: DuplicatedRepositoryEntryError if repository already has element with given name
         """
-        if name in self.elements.keys():
-            raise DuplicatedRepositoryEntryError(name)
-        FileUtils.save_file_bytes(self.repository_dir + name, image)
-        self.elements[name] = histogram
+        formatted_name = FileUtils.get_filename_from_path(name)
+        if formatted_name in self.elements.keys():
+            raise DuplicatedRepositoryEntryError(formatted_name)
+        FileUtils.save_file_bytes(self.repository_dir + formatted_name, image)
+        self.elements[formatted_name] = histogram
 
     def remove(self, name):
         """

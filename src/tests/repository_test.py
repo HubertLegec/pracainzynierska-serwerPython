@@ -4,21 +4,20 @@ import tempfile
 import unittest
 from os import path
 
+from .utils import get_resource_path
 from visual_search_engine.repository import DuplicatedRepositoryEntryError
 from visual_search_engine.repository import Repository
 from visual_search_engine.utils import FileUtils
 
 
 class RepositoryTest(unittest.TestCase):
-    TEST_IMAGE_1 = 'test_file_1.jpg'
-    TEST_IMAGE_2 = 'test_file_2.jpg'
+    TEST_IMAGE_1 = get_resource_path('test_images/test_file_1.jpg')
+    TEST_IMAGE_2 = get_resource_path('test_images/test_file_2.jpg')
 
     @classmethod
     def setUpClass(cls):
-        with open(cls.TEST_IMAGE_1, 'rb') as file1:
-            cls.test_img_1 = file1.read()
-        with open(cls.TEST_IMAGE_2, 'rb') as file2:
-            cls.test_img_2 = file2.read()
+        cls.test_img_1 = FileUtils.load_file_bytes(cls.TEST_IMAGE_1)
+        cls.test_img_2 = FileUtils.load_file_bytes(cls.TEST_IMAGE_2)
 
     @classmethod
     def setUp(cls):
@@ -39,16 +38,17 @@ class RepositoryTest(unittest.TestCase):
         repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         elements = repository.elements.items()
+        test_image_1_name = FileUtils.get_filename_from_path(self.TEST_IMAGE_1)
         self.assertEqual(1, len(elements))
-        self.assertEqual(self.TEST_IMAGE_1, next(iter(elements))[0])
-        self.assertEqual([self.TEST_IMAGE_1], os.listdir(repository.repository_dir))
+        self.assertEqual(test_image_1_name, next(iter(elements))[0])
+        self.assertEqual([test_image_1_name], os.listdir(repository.repository_dir))
 
     def test_after_remove_repository_with_one_element_is_empty(self):
         repository = Repository(self.temp_root)
         repository.add(self.TEST_IMAGE_1, self.test_img_1, {})
         elements = repository.elements.items()
         self.assertEqual(1, len(elements))
-        repository.remove(self.TEST_IMAGE_1)
+        repository.remove(FileUtils.get_filename_from_path(self.TEST_IMAGE_1))
         elements = repository.elements.items()
         self.assertEqual(0, len(elements))
         self.assertTrue(not os.listdir(repository.repository_dir))
@@ -66,8 +66,5 @@ class RepositoryTest(unittest.TestCase):
         repository.add(self.TEST_IMAGE_2, self.test_img_1, {})
         elements = repository.elements.items()
         self.assertEqual(2, len(elements))
-        self.assertEqual(elements, repository.find({}))
+        self.assertEqual(elements, repository.get_all())
 
-
-if __name__ == '__main__':
-    unittest.main()

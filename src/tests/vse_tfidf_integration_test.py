@@ -2,27 +2,27 @@ import unittest
 
 import cv2
 
-from tests.utils import get_image_name_from_url
+from tests.utils import get_image_name_from_url, get_resource_path
 from visual_search_engine import VisualSearchEngine
 from visual_search_engine.bow import BOW
 from visual_search_engine.utils import ImageLoader
 from visual_search_engine.utils import ConfigLoader
+from visual_search_engine.utils import FileUtils
 
 
 class TfidfRankerIntegrationTest(unittest.TestCase):
-    TEST_IMAGE_1 = 'test_file_1.jpg'
-    TEST_IMAGE_2 = 'test_file_2.jpg'
-    IMAGES_DIR = './integration_resources/'
+    TEST_IMAGE_1 = get_resource_path('test_images/test_file_1.jpg')
+    TEST_IMAGE_2 = get_resource_path('test_images/test_file_2.jpg')
+    IMAGES_DIR = get_resource_path('integration_resources')
 
     @classmethod
     def setUpClass(cls):
-        with open(cls.TEST_IMAGE_1, 'rb') as file1:
-            cls.test_img_1 = file1.read()
-        with open(cls.TEST_IMAGE_2, 'rb') as file2:
-            cls.test_img_2 = file2.read()
+        cls.test_img_1 = FileUtils.load_file_bytes(cls.TEST_IMAGE_1)
+        cls.test_img_2 = FileUtils.load_file_bytes(cls.TEST_IMAGE_2)
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = ImageLoader.load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
-        cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
+        images = ImageLoader.load_grayscale_images(get_resource_path('test_images'))
+        c = ConfigLoader.load_config('tfidf_test_config.ini')
+        cls.vocabulary = BOW.generate_vocabulary(images, extractor, c['vocabulary'])
 
     @classmethod
     def setUp(cls):
@@ -43,6 +43,3 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
         self.assertTrue(4, len(result))
         expected_result = ['ukbench00006.jpg', 'ukbench00004.jpg', 'ukbench00005.jpg', 'ukbench00007.jpg']
         self.assertEqual(expected_result, result)
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,8 +1,7 @@
 """visual search engine"""
 from .error import SearchEngineError
-from visual_search_engine.bow import ExtractorProvider
-from visual_search_engine.bow import MatcherProvider
-from visual_search_engine.engine import VisualSearchEngine
+from .engine import VisualSearchEngine
+from .web_app import start, configure
 
 
 

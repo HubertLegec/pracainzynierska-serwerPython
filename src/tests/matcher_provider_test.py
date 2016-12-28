@@ -1,7 +1,7 @@
 import unittest
 
 from tests.utils import get_object_name_with_package
-from visual_search_engine import MatcherProvider
+from visual_search_engine.bow import MatcherProvider
 
 
 class MatcherProviderTest(unittest.TestCase):
@@ -19,6 +19,3 @@ class MatcherProviderTest(unittest.TestCase):
         matcher = MatcherProvider.get_matcher(config)
         matcher_name = get_object_name_with_package(matcher)
         self.assertEqual('cv2.BFMatcher', matcher_name)
-
-if __name__ == '__main__':
-    unittest.main()

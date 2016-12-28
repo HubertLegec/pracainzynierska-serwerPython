@@ -19,7 +19,7 @@ class ImageRepository(Resource):
             json = jsonify(message='Image added')
             self.log.info('Image + ' + name + 'added to repository.')
             return make_response(json, 201)
-        except DuplicatedRepositoryEntryError(name) as e:
+        except DuplicatedRepositoryEntryError as e:
             no_entry_json = jsonify(message=e.message)
             return make_response(no_entry_json, 409)
         except (ImgLoadError, ImgSizeError) as e:

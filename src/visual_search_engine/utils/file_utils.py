@@ -1,6 +1,7 @@
 import pickle
 import shutil
 import logging
+import os
 
 
 class FileUtils:
@@ -48,3 +49,7 @@ class FileUtils:
         except OSError as e:
             logging.info("Error during removing directory '" + dir_path + "'")
             return
+
+    @classmethod
+    def get_filename_from_path(cls, path):
+        return os.path.basename(path)

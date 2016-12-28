@@ -9,12 +9,10 @@ from .web import HistogramSearcher
 
 
 app = Flask('Visual Search Engine')
-api = Api(app)
-
-NOT_FOUND_ERROR = 404
+app_configured = False
 
 
-@app.errorhandler(NOT_FOUND_ERROR)
+@app.errorhandler(FileNotFoundError)
 def not_found_handler(error):
     return jsonify(request.url + ' not found')
 
@@ -25,18 +23,23 @@ def health_check():
 
 
 def configure(search_engine, vocabulary, matcher):
-    api.add_resource(VocabularyData, '/data/vocabulary',
-                     resource_class_kwargs={'vocabulary': vocabulary})
-    api.add_resource(ExtractorData, '/data/extractor',
-                     resource_class_kwargs={'extractor': search_engine.bow.extractor})
-    api.add_resource(MatcherData, '/data/matcher',
-                     resource_class_kwargs={'matcher': matcher})
-    api.add_resource(Searcher, '/find', '/find/<int:limit>',
-                     resource_class_kwargs={'search_engine': search_engine, 'api': api})
-    api.add_resource(HistogramSearcher, '/findByHist', '/findByHist/<int:limit>',
-                     resource_class_kwargs={'search_engine': search_engine, 'api': api})
-    api.add_resource(ImageRepository, '/upload/<path:name>',
-                     resource_class_kwargs={'search_engine': search_engine})
+    global app_configured
+    global app
+    if not app_configured:
+        api = Api(app)
+        api.add_resource(VocabularyData, '/data/vocabulary',
+                         resource_class_kwargs={'vocabulary': vocabulary})
+        api.add_resource(ExtractorData, '/data/extractor',
+                         resource_class_kwargs={'extractor': search_engine.bow.extractor})
+        api.add_resource(MatcherData, '/data/matcher',
+                         resource_class_kwargs={'matcher': matcher})
+        api.add_resource(Searcher, '/find', '/find/<int:limit>',
+                         resource_class_kwargs={'search_engine': search_engine, 'api': api})
+        api.add_resource(HistogramSearcher, '/findByHist', '/findByHist/<int:limit>',
+                         resource_class_kwargs={'search_engine': search_engine, 'api': api})
+        api.add_resource(ImageRepository, '/upload/<path:name>',
+                         resource_class_kwargs={'search_engine': search_engine})
+        app_configured = True
     return app
 
 

@@ -1,61 +1,46 @@
 import io
 import json
 import unittest
-
 import cv2
-from visual_search_engine.bow import MatcherProvider
-from tests.utils import get_image_name_from_url
+
+from .utils import get_image_name_from_url, get_resource_path
 from visual_search_engine import VisualSearchEngine
+from visual_search_engine import configure
 from visual_search_engine.bow import BOW
+from visual_search_engine.bow import MatcherProvider
 from visual_search_engine.utils import ImageLoader
 from visual_search_engine.utils import ConfigLoader
-from visual_search_engine.web import ExtractorData
-from visual_search_engine.web import ImageRepository
-from visual_search_engine.web import MatcherData
-from visual_search_engine.web import Searcher
-from visual_search_engine.web import VocabularyData
-from visual_search_engine import web_app
+from visual_search_engine.utils import FileUtils
 
 
 class VseRestApiTest(unittest.TestCase):
     """Tests VSE Rest API - checks if server returns proper messages and codes"""
-    TEST_IMAGE_1 = 'test_file_1.jpg'
-    TEST_IMAGE_2 = 'test_file_2.jpg'
+    TEST_IMAGE_1 = get_resource_path('test_images/test_file_1.jpg')
+    TEST_IMAGE_2 = get_resource_path('test_images/test_file_2.jpg')
 
     @classmethod
     def setUpClass(cls):
-        with open(cls.TEST_IMAGE_1, 'rb') as file1:
-            cls.test_img_1 = file1.read()
-        with open(cls.TEST_IMAGE_2, 'rb') as file2:
-            cls.test_img_2 = file2.read()
+        cls.test_img_1 = FileUtils.load_file_bytes(cls.TEST_IMAGE_1)
+        cls.test_img_2 = FileUtils.load_file_bytes(cls.TEST_IMAGE_2)
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = ImageLoader.load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
-        cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
+        images = ImageLoader.load_grayscale_images('test_images')
         config = ConfigLoader.load_config('test_config.ini')
+        cls.vocabulary = BOW.generate_vocabulary(images, extractor, config)
         matcher_config = config.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
         search_engine = VisualSearchEngine(cls.vocabulary, config)
-        cls.app = web_app.app
+        cls.app = configure(search_engine, cls.vocabulary, matcher_config)
         cls.app.testing = True
-        cls.api = web_app.api
-        cls.api.add_resource(Searcher, '/find', '/find/<int:limit>',
-                             resource_class_kwargs={'api': cls.api, 'search_engine': search_engine})
-        cls.api.add_resource(ImageRepository, '/upload/<path:name>',
-                             resource_class_kwargs={'api': cls.api, 'search_engine': search_engine})
-        cls.api.add_resource(VocabularyData, '/data/vocabulary',
-                             resource_class_kwargs={'vocabulary': cls.vocabulary})
-        cls.api.add_resource(ExtractorData, '/data/extractor',
-                             resource_class_kwargs={'extractor': search_engine.bow.extractor})
-        cls.api.add_resource(MatcherData, '/data/matcher',
-                             resource_class_kwargs={'matcher': matcher_config})
-        cls.app_context = web_app.app.app_context()
-
-    @classmethod
-    def setUp(cls):
+        cls.app_context = cls.app.app_context()
         cls.app_context.push()
         cls.client = cls.app.test_client()
 
     @classmethod
-    def tearDown(cls):
+    def setUp(cls):
+        cls.client.delete('/upload/test_file_1.jpg')
+        cls.client.delete('/upload/test_file_2.jpg')
+
+    @classmethod
+    def tearDownClass(cls):
         cls.app_context.pop()
 
     def test_should_return_vocabulary(self):
@@ -97,12 +82,9 @@ class VseRestApiTest(unittest.TestCase):
 
     def assert_result_contains(self, response, image_list):
         msg = json.loads(response.data.decode())
-        names_without_urls = [get_image_name_from_url(url) for url in msg['images']]
-        self.assertEqual(names_without_urls, image_list)
+        names_without_urls = [get_image_name_from_url(img['url']) for img in msg['images']]
+        self.assertEqual(names_without_urls, [FileUtils.get_filename_from_path(img) for img in image_list])
 
     def upload_image(self, name, image):
-        return self.client.post('/upload/' + name, data=image, headers={'Content-Type': 'application/octet-stream'})
+        return self.client.post('/upload/' + FileUtils.get_filename_from_path(name), data=image, headers={'Content-Type': 'application/octet-stream'})
 
-
-if __name__ == '__main__':
-    unittest.main()

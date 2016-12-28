@@ -1,7 +1,7 @@
 import unittest
 
 from tests.utils import get_object_name_with_package
-from visual_search_engine import ExtractorProvider
+from visual_search_engine.bow import ExtractorProvider
 
 
 class ExtractorProviderTest(unittest.TestCase):
@@ -17,6 +17,3 @@ class ExtractorProviderTest(unittest.TestCase):
         extractor = ExtractorProvider.get_extractor(config)
         extractor_name = get_object_name_with_package(extractor)
         self.assertEqual('cv2.xfeatures2d_SURF', extractor_name)
-
-if __name__ == '__main__':
-    unittest.main()

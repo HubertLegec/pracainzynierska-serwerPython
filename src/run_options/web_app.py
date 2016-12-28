@@ -5,7 +5,7 @@ from visual_search_engine.bow import MatcherProvider
 from visual_search_engine.utils import FileUtils
 from visual_search_engine.utils import ConfigLoader
 from visual_search_engine.utils import LogFactory
-from visual_search_engine.web_app import start, configure
+from visual_search_engine import start, configure
 
 
 def parse_parameters(default_vocabulary, default_config):

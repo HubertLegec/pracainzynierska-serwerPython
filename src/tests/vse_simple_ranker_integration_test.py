@@ -10,8 +10,8 @@ from visual_search_engine.utils import ConfigLoader
 
 
 class SimpleRankerIntegrationTest(unittest.TestCase):
-    TEST_IMAGE_1 = 'test_file_1.jpg'
-    TEST_IMAGE_2 = 'test_file_2.jpg'
+    TEST_IMAGE_1 = './test_images/test_file_1.jpg'
+    TEST_IMAGE_2 = './test_images/test_file_2.jpg'
     IMAGES_DIR = './integration_resources/'
 
     @classmethod
@@ -21,8 +21,9 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         with open(cls.TEST_IMAGE_2, 'rb') as file2:
             cls.test_img_2 = file2.read()
         extractor = cv2.xfeatures2d.SIFT_create()
-        images = ImageLoader.load_grayscale_images([cls.TEST_IMAGE_1, cls.TEST_IMAGE_2])
-        cls.vocabulary = BOW.generate_vocabulary(images, 200, extractor)
+        images = ImageLoader.load_grayscale_images('test_images')
+        c = cls.config = ConfigLoader.load_config('test_config.ini')
+        cls.vocabulary = BOW.generate_vocabulary(images, extractor, c)
 
     @classmethod
     def setUp(cls):
@@ -41,5 +42,5 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
     def test_engine_returns_suitable_elements(self):
         result = self.searchEngine.find(self.test_img_1, 4)
         self.assertTrue(4, len(result))
-        expected_result = ['ukbench00004.jpg', 'ukbench00006.jpg', 'ukbench00007.jpg', 'ukbench00005.jpg']
-        self.assertEqual(expected_result, result)
+        expected_result = ['ukbench00004.jpg', 'ukbench00007.jpg', 'ukbench00005.jpg', 'ukbench00006.jpg']
+        self.assertEqual(expected_result, [el[1] for el in result])

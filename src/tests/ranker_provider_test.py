@@ -22,6 +22,3 @@ class RankerProviderTest(unittest.TestCase):
         method = ranker.method
         self.assertEqual('visual_search_engine.ranker.tfidf_ranker.TFIDFRanker', ranker_name)
         self.assertEqual('CORRELATION', method)
-
-if __name__ == '__main__':
-    unittest.main()
