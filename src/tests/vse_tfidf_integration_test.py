@@ -23,11 +23,7 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
         images = ImageLoader.load_grayscale_images(get_resource_path('test_images'))
         c = ConfigLoader.load_config('tfidf_test_config.ini')
         cls.vocabulary = BOW.generate_vocabulary(images, extractor, c['vocabulary'])
-
-    @classmethod
-    def setUp(cls):
-        cls.config = ConfigLoader.load_config('tfidf_test_config.ini')
-        cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)  # todo
+        cls.searchEngine = VisualSearchEngine(cls.vocabulary, c)
         cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
 
     def test_repository_has_elements(self):
@@ -41,5 +37,7 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
     def test_engine_returns_suitable_elements(self):
         result = self.searchEngine.find(self.test_img_1, 4)
         self.assertTrue(4, len(result))
-        expected_result = ['ukbench00006.jpg', 'ukbench00004.jpg', 'ukbench00005.jpg', 'ukbench00007.jpg']
-        self.assertEqual(expected_result, result)
+        expected_result = ['ukbench00004.jpg', 'ukbench00007.jpg', 'ukbench00005.jpg', 'ukbench00006.jpg']
+        result_names = [pair[1] for pair in result]
+        self.assertEqual(expected_result[0], result_names[0])
+        self.assertEqual(4, len(set(expected_result).intersection(result_names)))

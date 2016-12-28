@@ -32,12 +32,11 @@ class VseRestApiTest(unittest.TestCase):
         cls.app.testing = True
         cls.app_context = cls.app.app_context()
         cls.app_context.push()
-        cls.client = cls.app.test_client()
 
-    @classmethod
-    def setUp(cls):
-        cls.client.delete('/upload/test_file_1.jpg')
-        cls.client.delete('/upload/test_file_2.jpg')
+    def setUp(self):
+        self.client = self.app.test_client()
+        self.client.delete('/upload/test_file_1.jpg')
+        self.client.delete('/upload/test_file_2.jpg')
 
     @classmethod
     def tearDownClass(cls):

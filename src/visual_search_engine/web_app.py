@@ -10,11 +10,12 @@ from .web import HistogramSearcher
 
 app = Flask('Visual Search Engine')
 app_configured = False
+NOT_FOUND_CODE = 404
 
 
 @app.errorhandler(FileNotFoundError)
 def not_found_handler(error):
-    return jsonify(request.url + ' not found')
+    return jsonify(request.url + ' not found'), NOT_FOUND_CODE
 
 
 @app.route('/healthCheck')

@@ -24,10 +24,6 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         images = ImageLoader.load_grayscale_images('test_images')
         c = cls.config = ConfigLoader.load_config('test_config.ini')
         cls.vocabulary = BOW.generate_vocabulary(images, extractor, c)
-
-    @classmethod
-    def setUp(cls):
-        cls.config = ConfigLoader.load_config('test_config.ini')
         cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)
         cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
 
@@ -43,4 +39,6 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         result = self.searchEngine.find(self.test_img_1, 4)
         self.assertTrue(4, len(result))
         expected_result = ['ukbench00004.jpg', 'ukbench00007.jpg', 'ukbench00005.jpg', 'ukbench00006.jpg']
-        self.assertEqual(expected_result, [el[1] for el in result])
+        result_names = [pair[1] for pair in result]
+        self.assertEqual(expected_result[0], result_names[0])
+        self.assertEqual(4, len(set(expected_result).intersection(result_names)))
