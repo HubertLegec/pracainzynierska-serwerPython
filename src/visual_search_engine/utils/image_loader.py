@@ -19,8 +19,8 @@ class ImageLoader:
         :var: paths paths of images to load
         :return: array with loaded images
         """
-        files = sorted(glob.glob(images_directory + cls.FILE_PATTERN))
-        return [cls.load_grayscale_img(file) for file in files]
+        files = sorted(glob.glob1(images_directory, cls.FILE_PATTERN))
+        return [cls.load_grayscale_img(images_directory + '/' + file) for file in files]
 
     @classmethod
     def load_grayscale_img(cls, path):
@@ -69,3 +69,11 @@ class ImageLoader:
             image = cv2.resize(image, new_width, new_height, interpolation=cv2.INTER_LANCZOS4)
         return image
 
+    @classmethod
+    def get_all_jpg_paths_from_dir(cls, directory):
+        """
+        Return array of paths to jpg images in given directory
+        :param directory: directory to search for jpg in
+        :return: array of paths to found jpg images
+        """
+        return sorted(glob.glob1(directory, cls.FILE_PATTERN))

@@ -1,5 +1,4 @@
 import argparse
-import glob
 
 from visual_search_engine.utils import LogFactory
 from visual_search_engine.utils import ConfigLoader
@@ -7,8 +6,6 @@ from visual_search_engine.utils import FileUtils
 from visual_search_engine.utils import ImageLoader
 from visual_search_engine.bow import ExtractorProvider
 from visual_search_engine.bow import BOW
-
-FILE_PATTERN = '*.jpg'
 
 
 def parse_parameters():
@@ -30,7 +27,7 @@ if __name__ == "__main__":
     extractor = ExtractorProvider.get_extractor(extractorConfig)
     images_directory = FileUtils.normalize_dir_path(params.images)
     log.info('Loading images...')
-    files = sorted(glob.glob(images_directory + FILE_PATTERN))
+    files = ImageLoader.get_all_jpg_paths_from_dir(images_directory)
     images = ImageLoader.load_grayscale_images(images_directory)
     log.info('Generating vocabulary...')
     vocabulary_config = config['vocabulary']

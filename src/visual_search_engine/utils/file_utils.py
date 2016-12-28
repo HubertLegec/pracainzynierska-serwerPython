@@ -48,10 +48,3 @@ class FileUtils:
         except OSError as e:
             logging.info("Error during removing directory '" + dir_path + "'")
             return
-
-    @classmethod
-    def get_image_name_from_url(cls, url):
-        start_name_idx = url.rfind('/')
-        if start_name_idx < 0:
-            return url
-        return url[start_name_idx + 1:]

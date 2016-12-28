@@ -1,4 +1,3 @@
-import glob
 import unittest
 
 import cv2
@@ -34,7 +33,7 @@ class TfidfRankerIntegrationTest(unittest.TestCase):
     def test_repository_has_elements(self):
         repository_items = self.searchEngine.repository.elements.items()
         self.assertEqual(16, len(repository_items))
-        files = glob.glob(self.IMAGES_DIR + VisualSearchEngine.FILE_PATTERN)
+        files = ImageLoader.get_all_jpg_paths_from_dir(self.IMAGES_DIR)
         image_names = [get_image_name_from_url(path) for path in files]
         repository_image_names = [entry[0] for entry in repository_items]
         self.assertEqual(sorted(image_names), sorted(repository_image_names))
