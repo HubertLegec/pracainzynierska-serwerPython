@@ -3,8 +3,7 @@ from flask_restful import Api
 from .web import Searcher
 from .web import ImageRepository
 from .web import VocabularyData
-from .web import ExtractorData
-from .web import MatcherData
+from .web import OpenCvConfigurationData
 from .web import HistogramSearcher
 
 
@@ -30,10 +29,8 @@ def configure(search_engine, vocabulary, matcher):
         api = Api(app)
         api.add_resource(VocabularyData, '/data/vocabulary',
                          resource_class_kwargs={'vocabulary': vocabulary})
-        api.add_resource(ExtractorData, '/data/extractor',
-                         resource_class_kwargs={'extractor': search_engine.bow.extractor})
-        api.add_resource(MatcherData, '/data/matcher',
-                         resource_class_kwargs={'matcher': matcher})
+        api.add_resource(OpenCvConfigurationData, '/data/openCvConfig',
+                         resource_class_kwargs={'matcher': matcher, 'extractor': search_engine.bow.extractor})
         api.add_resource(Searcher, '/find', '/find/<int:limit>',
                          resource_class_kwargs={'search_engine': search_engine, 'api': api})
         api.add_resource(HistogramSearcher, '/findByHist', '/findByHist/<int:limit>',
