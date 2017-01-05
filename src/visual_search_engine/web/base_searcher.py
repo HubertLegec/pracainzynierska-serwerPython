@@ -18,7 +18,8 @@ class BaseSearcher(Resource):
         return {
             'url': url,
             'matchRate': rate,
-            'name': name
+            'name': name,
+            'pageUrl': None  # TODO - return image url
         }
 
     def _create_url_for_path(self, path):

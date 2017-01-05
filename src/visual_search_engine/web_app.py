@@ -35,7 +35,7 @@ def configure(search_engine, vocabulary, matcher):
                          resource_class_kwargs={'search_engine': search_engine, 'api': api})
         api.add_resource(HistogramSearcher, '/findByHist', '/findByHist/<int:limit>',
                          resource_class_kwargs={'search_engine': search_engine, 'api': api})
-        api.add_resource(ImageRepository, '/upload/<path:name>',
+        api.add_resource(ImageRepository, '/upload/<string:name>',
                          resource_class_kwargs={'search_engine': search_engine})
         app_configured = True
     return app

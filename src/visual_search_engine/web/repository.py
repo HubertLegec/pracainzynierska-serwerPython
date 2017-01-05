@@ -15,10 +15,11 @@ class ImageRepository(Resource):
     def post(self, name):
         self.log.info('Adding new image: ' + name)
         try:
-            self.search_engine.add_new_image(request.data, name)
+            image = request.files['upload'].read()
+            self.search_engine.add_new_image(image, name)
             json = jsonify(message='Image added')
-            self.log.info('Image + ' + name + 'added to repository.')
-            return make_response(json, 201)
+            self.log.info('Image ' + name + ' added to repository.')
+            return json
         except DuplicatedRepositoryEntryError as e:
             no_entry_json = jsonify(message=e.message)
             return make_response(no_entry_json, 409)
@@ -35,7 +36,9 @@ class ImageRepository(Resource):
         try:
             self.search_engine.repository.remove(name)
             self.log.info('Image ' + name + ' removed')
-            return 'Image removed'
+            json = jsonify(message='Image removed')
+            return json
         except NoSuchRepositoryEntryError as e:
-            raise FileNotFoundError
+            json = jsonify(message=e.message)
+            return make_response(json, 404)
 
