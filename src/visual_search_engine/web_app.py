@@ -5,6 +5,7 @@ from .web import ImageRepository
 from .web import VocabularyData
 from .web import OpenCvConfigurationData
 from .web import HistogramSearcher
+from flask.ext.pymongo import PyMongo
 
 
 app = Flask('Visual Search Engine')
@@ -22,10 +23,12 @@ def health_check():
     return 'OK'
 
 
-def configure(search_engine, vocabulary, matcher):
+def configure(search_engine, vocabulary, config):
     global app_configured
     global app
     if not app_configured:
+        matcher = config['matcher']
+        configure_mongo(app, search_engine, config)
         api = Api(app)
         api.add_resource(VocabularyData, '/data/vocabulary',
                          resource_class_kwargs={'vocabulary': vocabulary})
@@ -41,6 +44,14 @@ def configure(search_engine, vocabulary, matcher):
     return app
 
 
-def start(search_engine, vocabulary, matcher, host='127.0.0.1', port=5000, debug=False):
-    application = configure(search_engine, vocabulary, matcher)
+def start(search_engine, vocabulary, config, host='127.0.0.1', port=5000, debug=False):
+    application = configure(search_engine, vocabulary, config)
     application.run(host, port, debug)
+
+
+def configure_mongo(app, search_engine, config):
+    app.config['MONGO_DBNAME'] = config['database'].get('db_name', 'vse')
+    app.config['MONGO_URI'] = config['database'].get('connection_string', None)
+    db_mode = config['database'].get('mode', 'read')
+    mongo = PyMongo(app)
+    search_engine.repository.set_db(mongo, db_mode == 'create')

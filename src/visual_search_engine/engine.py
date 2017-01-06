@@ -16,7 +16,7 @@ class VisualSearchEngine:
 
     def __init__(self, vocabulary, configuration={}):
         self.bow = BOWProvider.get_bow(vocabulary, configuration['extractor'], configuration['matcher'])
-        self.repository = Repository(configuration['repository']['directory'])
+        self.repository = Repository()
         self.ranker = RankerProvider.get_ranker(configuration['ranker'])
         self.log = logging.getLogger('vse.VSE')
 
@@ -35,10 +35,10 @@ class VisualSearchEngine:
         self.log.info('Add new image with name ' + name + ' request')
         img = ImageLoader.load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
-        self.repository.add(name, image, histogram)
+        self.repository.add_and_save(name, image, histogram)
         self.ranker.update(self.repository)
 
-    def add_images_in_batch(self, images_dir):
+    def add_images_in_batch(self, images_dir, db, fs):
         if not os.path.isdir(images_dir):
             raise IOError("The folder " + images_dir + " doesn't exist")
         self.log.info('Adding all jpg images from directory: ' + images_dir)
@@ -52,7 +52,8 @@ class VisualSearchEngine:
                 grayscale_image = ImageLoader.load_grayscale_img(img_path)
                 image = FileUtils.load_file_bytes(img_path)
                 histogram = self.bow.generate_histogram(grayscale_image)
-                self.repository.add(filename, image, histogram)
+                self.repository.add(filename, histogram)
+                self.save_image_in_db(db, fs, image, filename, histogram)
                 counter += 1
                 self.log.info('Image added to repository: ' + filename)
             except SearchEngineError as e:
@@ -64,3 +65,13 @@ class VisualSearchEngine:
         self.log.info('Remove image with name ' + name + ' request')
         self.repository.remove(name)
         self.ranker.update(self.repository)
+
+    @classmethod
+    def save_image_in_db(cls, db, fs, image, name, histogram, url=''):
+        id = fs.put(image, filename=name)
+        db.images.insert_one({
+            "file_id": id,
+            "name": name,
+            "url": url,
+            "histogram": [v.item() for v in histogram]
+        })

@@ -1,7 +1,8 @@
 import argparse
+from pymongo import MongoClient
+import gridfs
 
 from visual_search_engine import VisualSearchEngine
-from visual_search_engine.bow import MatcherProvider
 from visual_search_engine.utils import FileUtils
 from visual_search_engine.utils import ConfigLoader
 from visual_search_engine.utils import LogFactory
@@ -20,8 +21,15 @@ def parse_parameters(default_vocabulary, default_config):
 
 def load_files_to_repository(config, search_engine):
     files_dir = config['web'].get('files_dir', None)
-    if files_dir:
-        search_engine.add_images_in_batch(files_dir)
+    db_mode = config['database'].get('mode', 'read')
+    if files_dir and db_mode == 'create':
+        client = MongoClient(config['database'].get('connection_string', None))
+        db = client[config['database'].get('db_name', 'vse')]
+        fs = gridfs.GridFS(db)
+        db.images.delete_many({})
+        for i in fs.find({}):
+            fs.delete(i._id)
+        search_engine.add_images_in_batch(files_dir, db, fs)
 
 
 def load_app(params, auto_start=False):
@@ -35,7 +43,7 @@ def load_app(params, auto_start=False):
         start(
             search_engine,
             vocabulary,
-            configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS),
+            configuration,
             configuration['web']['host'],
             configuration['web']['port'],
             params.debug
@@ -44,7 +52,7 @@ def load_app(params, auto_start=False):
         return configure(
             search_engine,
             vocabulary,
-            configuration.get('matcher', MatcherProvider.DEFAULT_FLANN__PARAMS)
+            configuration
         )
 
 

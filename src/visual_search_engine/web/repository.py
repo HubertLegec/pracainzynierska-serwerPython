@@ -1,6 +1,6 @@
 import logging
 from flask_restful import Resource, request
-from flask import send_from_directory, make_response, jsonify
+from flask import make_response, jsonify
 from visual_search_engine.repository import NoSuchRepositoryEntryError
 from visual_search_engine.repository import DuplicatedRepositoryEntryError
 from visual_search_engine.utils import ImgLoadError, ImgSizeError
@@ -29,7 +29,7 @@ class ImageRepository(Resource):
 
     def get(self, name):
         self.log.info('Get image request for: ' + name)
-        return send_from_directory(self.search_engine.repository.repository_dir, name)
+        return self.search_engine.repository.get(name)
 
     def delete(self, name):
         self.log.info('Removing image: ' + name)
