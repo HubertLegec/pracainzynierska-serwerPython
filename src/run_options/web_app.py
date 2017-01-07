@@ -20,16 +20,16 @@ def parse_parameters(default_vocabulary, default_config):
 
 
 def load_files_to_repository(config, search_engine):
-    files_dir = config['web'].get('files_dir', None)
+    images = config['web'].get('images', None)
     db_mode = config['database'].get('mode', 'read')
-    if files_dir and db_mode == 'create':
+    if images and db_mode == 'create':
         client = MongoClient(config['database'].get('connection_string', None))
         db = client[config['database'].get('db_name', 'vse')]
         fs = gridfs.GridFS(db)
         db.images.delete_many({})
         for i in fs.find({}):
             fs.delete(i._id)
-        search_engine.add_images_in_batch(files_dir, db, fs)
+        search_engine.add_images_in_batch(images, db, fs)
 
 
 def load_app(params, auto_start=False):

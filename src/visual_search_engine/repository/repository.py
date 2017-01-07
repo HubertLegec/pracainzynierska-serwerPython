@@ -20,29 +20,30 @@ class Repository:
             raise DuplicatedRepositoryEntryError(name)
         self.elements[name] = histogram
 
-    def add_and_save(self, name, histogram, image, url=""):
+    def add_and_save(self, file, name, histogram, image, url=""):
         if not self.loaded:
             self.load()
-        if name in self.elements.keys():
-            raise DuplicatedRepositoryEntryError(name)
-        self.elements[name] = histogram
-        self.mongo.save_file(name, image)
+        if file in self.elements.keys():
+            raise DuplicatedRepositoryEntryError(file)
+        self.elements[file] = histogram
+        self.mongo.save_file(file, image)
         self.mongo.db.images.insert_one({
+            "file": file,
             "name": name,
             "url": url,
             "histogram": [v.item() for v in histogram]
         })
 
-    def remove(self, name):
+    def remove(self, file):
         """
         Removes element with given name from repository if name is present, raises error otherwise
-        :param name: name of element that should be removed
+        :param file: name of element that should be removed
         """
         if not self.loaded:
             self.load()
-        if name not in self.elements.keys():
-            raise NoSuchRepositoryEntryError(name)
-        del self.elements[name]
+        if file not in self.elements.keys():
+            raise NoSuchRepositoryEntryError(file)
+        del self.elements[file]
 
     def get_all(self):
         """Returns all images from repository"""
@@ -50,10 +51,19 @@ class Repository:
             self.load()
         return self.elements.items()
 
-    def get(self, name):
+    def get(self, file):
         if not self.loaded:
             self.load()
-        return self.mongo.send_file(name)
+        if file not in self.elements.keys():
+            raise NoSuchRepositoryEntryError(file)
+        return self.mongo.send_file(file)
+
+    def get_description(self, file):
+        if not self.loaded:
+            self.load()
+        if file not in self.elements.keys():
+            raise NoSuchRepositoryEntryError(file)
+        return self.mongo.db.images.find_one({'file': file})
 
     def set_db(self, mongo, loaded):
         self.mongo = mongo
@@ -61,9 +71,9 @@ class Repository:
 
     def load(self):
         for image in self.mongo.db.images.find({}):
-            name = image['name']
+            file = image['file']
             histogram = self.array_to_numpy_array(image['histogram'])
-            self.elements[name] = histogram
+            self.elements[file] = histogram
         self.loaded = True
 
     @classmethod

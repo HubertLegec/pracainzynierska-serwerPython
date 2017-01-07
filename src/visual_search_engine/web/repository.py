@@ -12,11 +12,11 @@ class ImageRepository(Resource):
         self.log = logging.getLogger('vse.ImageRepository')
         self.search_engine = kwargs['search_engine']
 
-    def post(self, name):
-        self.log.info('Adding new image: ' + name)
+    def post(self, file, name):
+        self.log.info('Adding new image: ' + file)
         try:
             image = request.files['upload'].read()
-            self.search_engine.add_new_image(image, name)
+            self.search_engine.add_new_image(image, file, name)
             json = jsonify(message='Image added')
             self.log.info('Image ' + name + ' added to repository.')
             return json
@@ -27,15 +27,15 @@ class ImageRepository(Resource):
             error_json = jsonify(message=e.message)
             return make_response(error_json, 400)
 
-    def get(self, name):
-        self.log.info('Get image request for: ' + name)
-        return self.search_engine.repository.get(name)
+    def get(self, file):
+        self.log.info('Get image request for: ' + file)
+        return self.search_engine.repository.get(file)
 
-    def delete(self, name):
-        self.log.info('Removing image: ' + name)
+    def delete(self, file):
+        self.log.info('Removing image: ' + file)
         try:
-            self.search_engine.repository.remove(name)
-            self.log.info('Image ' + name + ' removed')
+            self.search_engine.repository.remove(file)
+            self.log.info('Image ' + file + ' removed')
             json = jsonify(message='Image removed')
             return json
         except NoSuchRepositoryEntryError as e:

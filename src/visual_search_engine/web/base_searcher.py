@@ -13,14 +13,15 @@ class BaseSearcher(Resource):
 
     def _create_image_description(self, result_entry):
         rate = result_entry[0]
+        file = result_entry[1]
         url = self._create_url_for_path(result_entry[1])
-        name = url[(url.rindex('/') + 1):url.rindex('.')]
+        description = self.search_engine.repository.get_description(file)
         return {
             'url': url,
             'matchRate': rate,
-            'name': name,
-            'pageUrl': None  # TODO - return image url
+            'name': description['name'],
+            'pageUrl': description['url']
         }
 
     def _create_url_for_path(self, path):
-        return self.api.url_for(ImageRepository, name=path, _external=True)
+        return self.api.url_for(ImageRepository, file=path, _external=True)

@@ -2,6 +2,7 @@ import cv2
 import numpy
 import glob
 import logging
+import json
 from . import ImgLoadError
 from . import ImgSizeError
 
@@ -77,3 +78,8 @@ class ImageLoader:
         :return: array of paths to found jpg images
         """
         return sorted(glob.glob1(directory, cls.FILE_PATTERN))
+
+    @classmethod
+    def load_image_definitions(cls, images):
+        with open(images) as json_data:
+            return json.load(json_data)

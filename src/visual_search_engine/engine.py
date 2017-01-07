@@ -31,29 +31,31 @@ class VisualSearchEngine:
         self.log.info('histogram: ' + numpy.array_str(histogram))
         return self.ranker.rank(histogram, self.repository, limit)
 
-    def add_new_image(self, image, name):
+    def add_new_image(self, image, file, name):
         self.log.info('Add new image with name ' + name + ' request')
         img = ImageLoader.load_grayscale_image_from_buffer(image)
         histogram = self.bow.generate_histogram(img)
-        self.repository.add_and_save(name, image, histogram)
+        self.repository.add_and_save(file, name, image, histogram)
         self.ranker.update(self.repository)
 
-    def add_images_in_batch(self, images_dir, db, fs):
-        if not os.path.isdir(images_dir):
-            raise IOError("The folder " + images_dir + " doesn't exist")
-        self.log.info('Adding all jpg images from directory: ' + images_dir)
-        files = ImageLoader.get_all_jpg_paths_from_dir(images_dir)
+    def add_images_in_batch(self, images, db, fs):
+        if not os.path.isfile(images):
+            raise IOError("The file " + images + " doesn't exist")
+        img_dir = FileUtils.get_dir_from_filename(images)
+        self.log.info('Adding all jpg images defined in file: ' + images + ' from dir: ' + img_dir)
+        descriptions = ImageLoader.load_image_definitions(images)
         counter = 0
-        self.log.info('There is ' + str(len(files)) + ' images in given directory')
-        for filename in files:
+        self.log.info('There is ' + str(len(descriptions)) + ' images in given directory')
+        for description in descriptions:
             try:
+                filename = description['file']
                 self.log.info('Processing image:' + filename)
-                img_path = images_dir + '/' + filename
+                img_path = img_dir + '/' + filename
                 grayscale_image = ImageLoader.load_grayscale_img(img_path)
                 image = FileUtils.load_file_bytes(img_path)
                 histogram = self.bow.generate_histogram(grayscale_image)
                 self.repository.add(filename, histogram)
-                self.save_image_in_db(db, fs, image, filename, histogram)
+                self.save_image_in_db(db, fs, image, description, histogram)
                 counter += 1
                 self.log.info('Image added to repository: ' + filename)
             except SearchEngineError as e:
@@ -67,11 +69,12 @@ class VisualSearchEngine:
         self.ranker.update(self.repository)
 
     @classmethod
-    def save_image_in_db(cls, db, fs, image, name, histogram, url=''):
-        id = fs.put(image, filename=name)
+    def save_image_in_db(cls, db, fs, image, description, histogram):
+        file = description['file']
+        fs.put(image, filename=file)
         db.images.insert_one({
-            "file_id": id,
-            "name": name,
-            "url": url,
+            "file": file,
+            "name": description['name'],
+            "url": description['url'],
             "histogram": [v.item() for v in histogram]
         })

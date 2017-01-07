@@ -53,3 +53,7 @@ class FileUtils:
     @classmethod
     def get_filename_from_path(cls, path):
         return os.path.basename(path)
+
+    @classmethod
+    def get_dir_from_filename(cls, filename):
+        return os.path.dirname(filename)
