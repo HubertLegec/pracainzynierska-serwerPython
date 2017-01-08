@@ -9,41 +9,16 @@ class Repository:
         self.mongo = None
         self.loaded = False
 
-    def add(self, name, histogram):
+    def add(self, file, histogram):
         """
         Adds given image to repository if there is no element with the same name
         :var: name inserted element name
         :var: histogram calculated image histogram
         :raise: DuplicatedRepositoryEntryError if repository already has element with given name
         """
-        if name in self.elements.keys():
-            raise DuplicatedRepositoryEntryError(name)
-        self.elements[name] = histogram
-
-    def add_and_save(self, file, name, histogram, image, url=""):
-        if not self.loaded:
-            self.load()
         if file in self.elements.keys():
             raise DuplicatedRepositoryEntryError(file)
         self.elements[file] = histogram
-        self.mongo.save_file(file, image)
-        self.mongo.db.images.insert_one({
-            "file": file,
-            "name": name,
-            "url": url,
-            "histogram": [v.item() for v in histogram]
-        })
-
-    def remove(self, file):
-        """
-        Removes element with given name from repository if name is present, raises error otherwise
-        :param file: name of element that should be removed
-        """
-        if not self.loaded:
-            self.load()
-        if file not in self.elements.keys():
-            raise NoSuchRepositoryEntryError(file)
-        del self.elements[file]
 
     def get_all(self):
         """Returns all images from repository"""

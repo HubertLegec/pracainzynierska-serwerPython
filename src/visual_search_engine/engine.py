@@ -31,14 +31,7 @@ class VisualSearchEngine:
         self.log.info('histogram: ' + numpy.array_str(histogram))
         return self.ranker.rank(histogram, self.repository, limit)
 
-    def add_new_image(self, image, file, name):
-        self.log.info('Add new image with name ' + name + ' request')
-        img = ImageLoader.load_grayscale_image_from_buffer(image)
-        histogram = self.bow.generate_histogram(img)
-        self.repository.add_and_save(file, name, image, histogram)
-        self.ranker.update(self.repository)
-
-    def add_images_in_batch(self, images, db, fs):
+    def add_images(self, images, db, fs):
         if not os.path.isfile(images):
             raise IOError("The file " + images + " doesn't exist")
         img_dir = FileUtils.get_dir_from_filename(images)
@@ -55,7 +48,7 @@ class VisualSearchEngine:
                 image = FileUtils.load_file_bytes(img_path)
                 histogram = self.bow.generate_histogram(grayscale_image)
                 self.repository.add(filename, histogram)
-                self.save_image_in_db(db, fs, image, description, histogram)
+                self._save_image_in_db(db, fs, image, description, histogram)
                 counter += 1
                 self.log.info('Image added to repository: ' + filename)
             except SearchEngineError as e:
@@ -63,13 +56,8 @@ class VisualSearchEngine:
         self.log.info('Number of images added: ' + str(counter))
         self.ranker.update(self.repository)
 
-    def remove_image(self, name):
-        self.log.info('Remove image with name ' + name + ' request')
-        self.repository.remove(name)
-        self.ranker.update(self.repository)
-
     @classmethod
-    def save_image_in_db(cls, db, fs, image, description, histogram):
+    def _save_image_in_db(cls, db, fs, image, description, histogram):
         file = description['file']
         fs.put(image, filename=file)
         db.images.insert_one({

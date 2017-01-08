@@ -29,7 +29,7 @@ def load_files_to_repository(config, search_engine):
         db.images.delete_many({})
         for i in fs.find({}):
             fs.delete(i._id)
-        search_engine.add_images_in_batch(images, db, fs)
+        search_engine.add_images(images, db, fs)
 
 
 def load_app(params, auto_start=False):

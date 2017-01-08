@@ -9,32 +9,40 @@ class ConfigParserTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        config_file = 'test_config.ini'
+        config_file = 'integration_resources/test_config.ini'
         cls.config = ConfigLoader.load_config(config_file)
 
     def test_file_parsing(self):
         correct_config = {
+            'web': {
+                'images': 'integration_resources/images.json'
+            },
             'logging': {
                 'console_logs': 'yes',
-                'file_logs': 'yes',
+                'file_logs': 'no',
                 'console_log_level': 'DEBUG',
                 'file_log_level': 'INFO',
                 'log_file': 'logs'
             },
             'extractor': {
-                'algorithm': 'SIFT'
+                'algorithm': 'SURF'
             },
             'matcher': {
                 'norm_type': 4,
                 'matcher_type': 'BFMatcher'
             },
-            'ranker': {},
-            'repository': {
-                'directory': './index/'
+            'ranker': {
+                'mode': 'SIMPLE',
+                'method': 'CHI_SQUARED_ALT'
             },
             'vocabulary': {
-                'max_descriptors': 2500,
-                'cluster_count': 250
+                'max_descriptors': 40000,
+                'cluster_count': 500
+            },
+            'database': {
+                'connection_string': 'mongodb://vseApp:vse123@ds035975.mlab.com:35975/vse_test',
+                'db_name': 'vse_test',
+                'mode': 'create'
             }
         }
         self.assertEqual(correct_config, self.config)

@@ -1,31 +1,37 @@
 import unittest
-
-import cv2
+from pymongo import MongoClient
+import gridfs
+from collections import namedtuple
 
 from tests.utils import get_image_name_from_url
 from visual_search_engine import VisualSearchEngine
-from visual_search_engine.bow import BOW
 from visual_search_engine.utils import ImageLoader
 from visual_search_engine.utils import ConfigLoader
+from visual_search_engine.utils import FileUtils
 
 
 class SimpleRankerIntegrationTest(unittest.TestCase):
     TEST_IMAGE_1 = './test_images/test_file_1.jpg'
-    TEST_IMAGE_2 = './test_images/test_file_2.jpg'
-    IMAGES_DIR = './integration_resources/'
+    IMAGES_FILE = './integration_resources/images.json'
+    IMAGES_DIR = './integration_resources'
+    CONFIG_FILE = './integration_resources/test_config.ini'
+    VOCABULARY_FILE = './integration_resources/vocabulary'
 
     @classmethod
     def setUpClass(cls):
-        with open(cls.TEST_IMAGE_1, 'rb') as file1:
-            cls.test_img_1 = file1.read()
-        with open(cls.TEST_IMAGE_2, 'rb') as file2:
-            cls.test_img_2 = file2.read()
-        extractor = cv2.xfeatures2d.SIFT_create()
-        images = ImageLoader.load_grayscale_images('test_images')
-        c = cls.config = ConfigLoader.load_config('test_config.ini')
-        cls.vocabulary = BOW.generate_vocabulary(images, extractor, c)
-        cls.searchEngine = VisualSearchEngine(cls.vocabulary, cls.config)
-        cls.searchEngine.add_images_in_batch(cls.IMAGES_DIR)
+        cls.test_img_1 = FileUtils.load_file_bytes(cls.TEST_IMAGE_1)
+        c = ConfigLoader.load_config(cls.CONFIG_FILE)
+        vocabulary = FileUtils.load(cls.VOCABULARY_FILE)
+        cls.searchEngine = VisualSearchEngine(vocabulary, c)
+        db = cls.get_db(c)
+        fs = gridfs.GridFS(db)
+        db.images.delete_many({})
+        for i in fs.find({}):
+            fs.delete(i._id)
+        cls.searchEngine.add_images(cls.IMAGES_FILE, db, fs)
+        Mongo = namedtuple('Mongo', 'db')
+        Mongo.db = db
+        cls.searchEngine.repository.set_db(Mongo, True)
 
     def test_repository_has_elements(self):
         repository_items = self.searchEngine.repository.elements.items()
@@ -42,3 +48,8 @@ class SimpleRankerIntegrationTest(unittest.TestCase):
         result_names = [pair[1] for pair in result]
         self.assertEqual(expected_result[0], result_names[0])
         self.assertEqual(4, len(set(expected_result).intersection(result_names)))
+
+    @classmethod
+    def get_db(cls, config):
+        client = MongoClient(config['database'].get('connection_string', None))
+        return client[config['database'].get('db_name', 'vse_test')]
