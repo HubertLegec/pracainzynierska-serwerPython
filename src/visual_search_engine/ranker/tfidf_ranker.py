@@ -1,5 +1,6 @@
 from . import Ranker
 import math
+import numpy
 
 
 class TFIDFRanker(Ranker):
@@ -11,17 +12,21 @@ class TFIDFRanker(Ranker):
     """
 
     def __init__(self, method='Chi-Squared-alt'):
-        self.vector = []
+        self.elements = None
         Ranker.__init__(self, method)
 
     def update(self, repository):
-        repository_values = repository.elements.values()
-        self.vector = [self._get_normalized_tfidf_hist(repository, hist) for hist in repository_values]
+        self.elements = {}
+        repository_elements = repository.elements.items()
+        for name, hist in repository_elements:
+            self.elements[name] = self._get_normalized_tfidf_hist(repository, hist)
 
     def rank(self, histogram, repository, limit):
+        if not self.elements:
+            self.update(repository)
         result = []
-        for file_name, hist in repository.get_all():
-            weighted_histogram = self._weight_histogram(hist, repository)
+        weighted_histogram = self._get_normalized_tfidf_hist(repository, histogram)
+        for file_name, hist in self.elements.items():
             match_rate = self._get_match_rate(weighted_histogram, hist, self.method)
             result.append((match_rate, file_name))
         limited_result = self._get_limited_result(result, limit)
@@ -29,12 +34,9 @@ class TFIDFRanker(Ranker):
 
     @classmethod
     def _get_normalized_tfidf_hist(cls, repository, histogram):
-        return cls._normalize_vector(cls._calculate_histogram_tfidf(repository, histogram))
-
-    @classmethod
-    def _weight_histogram(cls, histogram, repository):
         weighted_histogram = cls._calculate_histogram_tfidf(repository, histogram)
-        return cls._normalize_vector(weighted_histogram)
+        norm_vect = cls._normalize_vector(weighted_histogram)
+        return numpy.asarray(norm_vect, dtype=numpy.float32)
 
     @classmethod
     def _calculate_tf(cls, histogram, idx):

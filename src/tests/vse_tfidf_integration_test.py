@@ -12,7 +12,6 @@ from visual_search_engine.utils import FileUtils
 
 class TfidfRankerIntegrationTest(unittest.TestCase):
     TEST_IMAGE_1 = get_resource_path('test_images/test_file_1.jpg')
-    TEST_IMAGE_2 = get_resource_path('test_images/test_file_2.jpg')
     IMAGES_DIR = './integration_resources'
     IMAGES_FILE = './integration_resources/images.json'
     CONFIG_FILE = './integration_resources/tfidf_test_config.ini'
