@@ -3,6 +3,9 @@ from . import Ranker
 
 
 class SimpleRanker(Ranker):
+    """Ranker with no custom logic.
+    It doesn't store any custom data and doesn't use any additional parameters.
+    When images are ranked theirs histograms are compared and best matches are returned."""
     def __init__(self, method='CHI_SQUARED_ALT'):
         Ranker.__init__(self, method)
         self.log = logging.getLogger('vse.SimpleRanker')

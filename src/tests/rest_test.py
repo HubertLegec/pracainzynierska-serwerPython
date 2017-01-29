@@ -34,12 +34,19 @@ class VseRestApiTest(unittest.TestCase):
     def test_should_return_vocabulary(self):
         result = self.client.get('/data/vocabulary')
         self.assertEqual(200, result.status_code)
-        # TODO - improve test
+        body = json.loads(result.data.decode())
+        self.assertEqual(500, body['size'])
+        self.assertEqual(64, body['rowSize'])
+        vocabulary = body['vocabulary']
+        self.assertEqual(500, len(vocabulary))
 
     def test_should_return_openCV_config(self):
         result = self.client.get('/data/openCvConfig')
         self.assertEqual(200, result.status_code)
-        # TODO - improve test
+        body = json.loads(result.data.decode())
+        self.assertEqual('BFMatcher', body['matcher_type'])
+        self.assertEqual(4, body['norm_type'])
+        self.assertEqual('cv2.xfeatures2d_SURF', body['extractor'])
 
     def test_should_return_list_with_similar_images(self):
         find_result = self.client.post('/find', buffered=True,
@@ -52,6 +59,3 @@ class VseRestApiTest(unittest.TestCase):
         msg = json.loads(response.data.decode())
         names_without_urls = [get_image_name_from_url(img['url']) for img in msg['images']]
         self.assertEqual(names_without_urls, image_list)
-
-
-

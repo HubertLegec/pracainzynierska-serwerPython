@@ -1,13 +1,8 @@
-import os
-import shutil
 import tempfile
 import unittest
-from os import path
 
-from .utils import get_resource_path
 from visual_search_engine.repository import DuplicatedRepositoryEntryError
 from visual_search_engine.repository import Repository
-from visual_search_engine.utils import FileUtils
 
 
 class RepositoryTest(unittest.TestCase):
@@ -47,4 +42,3 @@ class RepositoryTest(unittest.TestCase):
         elements = repository.elements.items()
         self.assertEqual(2, len(elements))
         self.assertEqual(elements, repository.get_all())
-
