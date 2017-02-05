@@ -16,7 +16,6 @@ class Repository:
         :var: histogram calculated image histogram
         :raise: DuplicatedRepositoryEntryError if repository already has element with given name
         """
-        self.load()
         if file in self.elements.keys():
             raise DuplicatedRepositoryEntryError(file)
         self.elements[file] = histogram
